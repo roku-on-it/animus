@@ -29,12 +29,12 @@ export class ThrottlerStorageRedisService
 
   async getRecord(key: string): Promise<number[]> {
     const ttls = (
-      await this.redis.scan(0, 'MATCH', `${key}:*`, 'COUNT', this.scanCount)
+      await this.redis.scan(0, 'MATCH', key + ':*', 'COUNT', this.scanCount)
     ).pop();
     return (ttls as string[]).map((k) => parseInt(k.split(':').pop())).sort();
   }
 
   async addRecord(key: string, ttl: number): Promise<void> {
-    await this.redis.set(`${key}:${Date.now() + ttl * 1000}`, ttl, 'EX', ttl);
+    await this.redis.set(key + ':' + Date.now() + ttl * 1000, ttl, 'EX', ttl);
   }
 }

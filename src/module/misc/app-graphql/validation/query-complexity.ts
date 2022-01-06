@@ -10,11 +10,11 @@ export class ComplexityPlugin implements ApolloServerPlugin {
 
   constructor(private maxComplexity: number) {}
 
-  public serverWillStart(service: GraphQLServiceContext) {
+  public async serverWillStart(service: GraphQLServiceContext) {
     this.schema = service.schema;
   }
 
-  public requestDidStart() {
+  public async requestDidStart(): Promise<any> {
     return {
       didResolveOperation: ({ request, document }) => {
         const complexity = getComplexity({

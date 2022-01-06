@@ -28,7 +28,7 @@ services:
       - 6379:${STORE_PORT}
   postgres:
     container_name: 'postgres'
-    image: postgres:13-alpine
+    image: postgres:13.5-alpine
     networks:
       - network
     env_file:

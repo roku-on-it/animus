@@ -1,12 +1,4 @@
-import {
-  Args,
-  Context,
-  Mutation,
-  Parent,
-  Query,
-  ResolveField,
-  Resolver,
-} from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { User } from 'src/module/user/model/user';
 import { CurrentUser } from 'src/module/shared/decorator/param/current-user';
 import { UpdateUser } from 'src/module/user/input/update-user';
@@ -22,8 +14,6 @@ import { Id } from 'src/module/shared/decorator/param/id';
 import { UpdateMe } from 'src/module/user/input/update-me';
 import { RateLimit } from 'src/module/auth/decorator/rate-limit';
 import { GQLContext } from 'src/module/shared/interface/gql-context';
-import { ListPost } from 'src/module/post/input/list-post';
-import { PostList } from 'src/module/post/model/post-list';
 import { UserList } from 'src/module/user/model/user-list';
 
 @Resolver(() => User)
@@ -78,19 +68,6 @@ export class UserResolver {
     }
 
     return user.softRemove();
-  }
-
-  @ResolveField(() => PostList)
-  async posts(
-    @Parent() user: User,
-    @Payload('filter', true) filter: ListPost,
-  ): Promise<PostList> {
-    return filter.find(
-      {
-        loadRelationIds: true,
-      },
-      user,
-    );
   }
 
   // User's query & mutations

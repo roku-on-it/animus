@@ -35,6 +35,6 @@ export class ThrottlerStorageRedisService
   }
 
   async addRecord(key: string, ttl: number): Promise<void> {
-    await this.redis.set(key + ':' + Date.now() + ttl * 1000, ttl, 'EX', ttl);
+    await this.redis.set(key + ':' + Date.now(), ttl, 'EX', ttl);
   }
 }

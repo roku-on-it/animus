@@ -8,8 +8,15 @@ export const ProtectedField = (
   role: UserRole,
   returnTypeFunction?: ReturnTypeFunc,
   options?: FieldOptions,
-): PropertyDecorator =>
-  applyDecorators(
-    Field(returnTypeFunction, { middleware: [roleCheck], ...options }),
+): PropertyDecorator => {
+  if ('function' === typeof returnTypeFunction) {
+    return applyDecorators(
+      Field(returnTypeFunction, { middleware: [roleCheck], ...options }),
+      Extensions({ role }),
+    );
+  }
+  return applyDecorators(
+    Field({ middleware: [roleCheck], ...options }),
     Extensions({ role }),
   );
+};

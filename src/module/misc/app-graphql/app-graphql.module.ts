@@ -20,7 +20,7 @@ import { ComplexityPlugin } from 'src/module/misc/app-graphql/validation/query-c
       formatError: (error: GraphQLError) => {
         return {
           message: error.message,
-          status: error.extensions.exception.status,
+          status: error.extensions.exception?.status,
         };
       },
     }),

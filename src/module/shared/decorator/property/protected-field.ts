@@ -11,5 +11,5 @@ export const ProtectedField = (
 ): PropertyDecorator =>
   applyDecorators(
     Field(returnTypeFunction, { middleware: [roleCheck], ...options }),
-    Extensions({ role: role }),
+    Extensions({ role }),
   );

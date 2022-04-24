@@ -72,10 +72,6 @@ export class Substructure extends BaseEntity {
     }
 
     return super.findOneOrFail(...args).catch((error) => {
-      if (/22P02|22003/.test(error.code)) {
-        throw new NotFoundException(this.name + ' not found');
-      }
-
       if (error instanceof EntityNotFoundError) {
         throw new NotFoundException(this.name + ' not found');
       }

@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import * as Redis from 'ioredis';
+import Redis, { RedisOptions } from 'ioredis';
 import { ThrottlerStorage } from '@nestjs/throttler';
 
 @Injectable()
 export class ThrottlerStorageRedisService
   implements Omit<ThrottlerStorage, 'storage'>
 {
-  redis: Redis.Redis;
+  redis: Redis;
   scanCount: number;
 
-  constructor(redis?: Redis.Redis, scanCount?: number);
-  constructor(options?: Redis.RedisOptions, scanCount?: number);
+  constructor(redis?: Redis, scanCount?: number);
+  constructor(options?: RedisOptions, scanCount?: number);
   constructor(url?: string, scanCount?: number);
   constructor(
-    redisOrOptions?: Redis.Redis | Redis.RedisOptions | string,
+    redisOrOptions?: Redis | RedisOptions | string,
     scanCount?: number,
   ) {
     this.scanCount = typeof scanCount === 'undefined' ? 1000 : scanCount;

@@ -16,13 +16,17 @@ import { Field, GraphQLISODateTime, ID, ObjectType } from '@nestjs/graphql';
 import { plainToClassFromExist } from 'class-transformer';
 import { UpdateModel } from 'src/module/shared/input/update-model';
 import { ConflictException, NotFoundException } from '@nestjs/common';
-import { UniqueID } from 'nodejs-snowflake';
+import { Snowflake } from 'nodejs-snowflake';
+
+const snowflake = new Snowflake({
+  custom_epoch: 970444800,
+});
 
 @ObjectType()
 export class Substructure extends BaseEntity {
   @Field(() => ID)
   @PrimaryColumn({ type: 'bigint' })
-  id: bigint;
+  id: string;
 
   @Field(() => GraphQLISODateTime)
   @CreateDateColumn()
@@ -103,8 +107,6 @@ export class Substructure extends BaseEntity {
 
   @BeforeInsert()
   private async generateSnowflake() {
-    this.id = new UniqueID({
-      customEpoch: 1609459200,
-    }).getUniqueID() as bigint;
+    this.id = snowflake.getUniqueID().toString();
   }
 }

@@ -21,14 +21,14 @@ services:
       - redis
   redis:
     container_name: 'redis'
-    image: redis:6.2-alpine
+    image: redis:6.2.6-alpine
     networks:
       - network
     ports:
       - 6379:${STORE_PORT}
   postgres:
     container_name: 'postgres'
-    image: postgres:13.5-alpine
+    image: postgres:14.2-alpine
     networks:
       - network
     env_file:

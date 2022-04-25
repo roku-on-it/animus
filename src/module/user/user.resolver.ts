@@ -66,7 +66,7 @@ export class UserResolver {
     return user.softRemove();
   }
 
-  // User's query & mutations
+  // Current user's query & mutations
 
   @Query(() => User)
   // @Authorize()

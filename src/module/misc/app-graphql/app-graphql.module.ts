@@ -7,21 +7,20 @@ import {
   MAX_QUERY_DEPTH,
 } from 'src/module/misc/app-graphql/constants';
 import { ComplexityPlugin } from 'src/module/misc/app-graphql/validation/query-complexity';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
 @Module({
   imports: [
-    GraphQLModule.forRoot({
+    GraphQLModule.forRoot<ApolloDriverConfig>({
       cors: false,
       sortSchema: true,
       autoSchemaFile: true,
+      driver: ApolloDriver,
       plugins: [new ComplexityPlugin(MAX_COMPLEXITY)],
       validationRules: [maxDepth(MAX_QUERY_DEPTH)],
       context: ({ req, res }) => ({ req, res }),
       formatError: (error: GraphQLError) => {
-        return {
-          message: error.message,
-          status: error.extensions.exception?.status,
-        };
+        return error.extensions.response as GraphQLError;
       },
     }),
   ],

@@ -7,7 +7,7 @@ import { RegisterProducerService } from 'src/module/auth/service/register.produc
 import { GQLContext } from 'src/module/shared/interface/gql-context';
 import { Payload } from 'src/module/shared/decorator/param/payload';
 import { Authorize } from 'src/module/auth/decorator/authorize';
-import { RateLimit } from 'src/module/auth/decorator/rate-limit';
+import { RateLimit } from 'src/module/misc/app-throttle/decorator/rate-limit';
 
 @Resolver()
 export class AuthResolver {

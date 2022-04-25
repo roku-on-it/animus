@@ -4,7 +4,6 @@ import { User } from 'src/module/user/model/user';
 import { CreateUser } from 'src/module/user/input/create-user';
 import { LoginInput } from 'src/module/auth/input/login-input';
 import { RegisterProducerService } from 'src/module/auth/service/register.producer.service';
-import { RegisterResponse } from 'src/module/auth/model/register-response';
 import { GQLContext } from 'src/module/shared/interface/gql-context';
 import { Payload } from 'src/module/shared/decorator/param/payload';
 import { Authorize } from 'src/module/auth/decorator/authorize';
@@ -17,9 +16,9 @@ export class AuthResolver {
     private readonly registerService: RegisterProducerService,
   ) {}
 
-  @Mutation(() => RegisterResponse)
+  @Mutation(() => User)
   @RateLimit(3, 15) // limit: 3, ttl: 15
-  async register(@Payload() payload: CreateUser): Promise<RegisterResponse> {
+  async register(@Payload() payload: CreateUser): Promise<User> {
     return this.registerService.addToRegisterQueue(payload);
   }
 

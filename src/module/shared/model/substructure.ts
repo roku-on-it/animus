@@ -37,7 +37,7 @@ export class Substructure extends BaseEntity {
   save(options?: SaveOptions): Promise<this> {
     return super.save(options).catch((error) => {
       if ('23505' === error?.code) {
-        // 23505 is UniqueViolation for Postgres
+        // 23505 is UniqueViolation error code for Postgres
         throw new ConflictException();
       }
 

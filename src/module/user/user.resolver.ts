@@ -43,11 +43,7 @@ export class UserResolver {
   ): Promise<User> {
     const user = await User.findOneOrFail(payload.id);
 
-    if (currentUser.role <= user.role) {
-      throw new ForbiddenException('Insufficient permission');
-    }
-
-    if (currentUser.role <= payload.role) {
+    if (currentUser.role <= user.role || currentUser.role <= payload.role) {
       throw new ForbiddenException('Insufficient permission');
     }
 

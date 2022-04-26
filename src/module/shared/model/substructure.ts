@@ -27,7 +27,7 @@ export class Substructure extends BaseEntity {
   @CreateDateColumn()
   createdAt: Date;
 
-  @Field(() => GraphQLTimestamp, { nullable: true })
+  @Field(() => GraphQLTimestamp)
   @UpdateDateColumn()
   updatedAt: Date;
 

@@ -5,9 +5,11 @@ import { ConfigService } from '@nestjs/config';
 import * as session from 'express-session';
 import Redis from 'ioredis';
 import * as connectRedis from 'connect-redis';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.use(helmet());
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.enableCors();
 

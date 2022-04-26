@@ -13,7 +13,8 @@ export class GqlThrottlerGuard extends ThrottlerGuard {
 
     // Overriding the generateKey function to prevent generating md5 hash by default.
     this.generateKey = () => {
-      return ctx.req.session.userId || ctx.req.ip;
+      const handlerName = context.getHandler().name;
+      return handlerName + (ctx.req.session.userId ?? ctx.req.ip);
     };
 
     return { req: ctx.req, res: ctx.res };

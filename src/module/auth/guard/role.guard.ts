@@ -1,9 +1,4 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  ForbiddenException,
-  Injectable,
-} from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { UserRole } from 'src/module/user/model/enum/user-role';
@@ -27,14 +22,10 @@ export class RoleGuard implements CanActivate {
       return false;
     }
 
-    const user = await User.createQueryBuilder('user')
-      .select('user.role')
-      .where('user.id = :id', { id: session.userId })
-      .getOne();
-
-    if (null == user) {
-      throw new ForbiddenException();
-    }
+    const user = await User.withAuth.findOneOrFail(
+      { id: session.userId },
+      { select: ['role'] },
+    );
 
     return user.role >= role;
   }

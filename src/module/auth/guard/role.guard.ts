@@ -1,8 +1,8 @@
 import {
   CanActivate,
   ExecutionContext,
+  ForbiddenException,
   Injectable,
-  NotFoundException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
@@ -33,7 +33,7 @@ export class RoleGuard implements CanActivate {
       .getOne();
 
     if (null == user) {
-      throw new NotFoundException();
+      throw new ForbiddenException();
     }
 
     return user.role >= role;

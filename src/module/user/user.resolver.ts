@@ -15,28 +15,30 @@ import { UpdateMe } from 'src/module/user/input/update-me';
 import { RateLimit } from 'src/module/misc/app-throttle/decorator/rate-limit';
 import { GQLContext } from 'src/module/shared/interface/gql-context';
 import { UserList } from 'src/module/user/model/user-list';
+import { Authorize } from '../auth/decorator/authorize';
+import { UserRole } from './model/enum/user-role';
 
 @Resolver(() => User)
 export class UserResolver {
   constructor(private readonly authService: AuthService) {}
 
+  @Authorize(UserRole.User)
   @Query(() => User)
-  // @Authorize(UserRole.Mod)
   async user(@Id() id: number): Promise<User> {
     return User.findOneOrFail({ id });
   }
 
+  @Authorize(UserRole.User)
   @Query(() => UserList)
-  // @Authorize(UserRole.Mod)
   async users(
     @Args('filter', { nullable: true }) filter: ListUser,
   ): Promise<UserList> {
     return filter.find();
   }
 
-  @Mutation(() => User)
-  // @Authorize(UserRole.Admin)
+  @Authorize(UserRole.Root)
   @RateLimit(10, 20)
+  @Mutation(() => User)
   async updateUser(
     @CurrentUser() currentUser: User,
     @Payload() payload: UpdateUser,
@@ -50,9 +52,9 @@ export class UserResolver {
     return User.findOneAndUpdate(payload);
   }
 
-  @Mutation(() => User)
-  // @Authorize(UserRole.Admin)
+  @Authorize(UserRole.Root)
   @RateLimit(2, 10)
+  @Mutation(() => User)
   async deleteUser(
     @CurrentUser() currentUser: User,
     @Payload() payload: DeleteUser,
@@ -67,16 +69,13 @@ export class UserResolver {
   }
 
   // Current user's query & mutations
-
   @Query(() => User)
-  // @Authorize()
   async me(@CurrentUser() currentUser: User): Promise<User> {
     return currentUser;
   }
 
-  @Mutation(() => User)
-  // @Authorize()
   @RateLimit(2, 10)
+  @Mutation(() => User)
   async updateMyPassword(
     @CurrentUser() currentUser: User,
     @Payload() payload: UpdateUserPassword,
@@ -98,7 +97,6 @@ export class UserResolver {
   }
 
   @Mutation(() => User)
-  // @Authorize()
   async deleteMe(
     @CurrentUser() currentUser: User,
     @Context() context: GQLContext,
@@ -107,9 +105,8 @@ export class UserResolver {
     return currentUser.softRemove();
   }
 
+  // @RateLimit(3, 60)
   @Mutation(() => User)
-  // @Authorize()
-  @RateLimit(3, 60)
   async updateMe(
     @CurrentUser() currentUser: User,
     @Payload() payload: UpdateMe,

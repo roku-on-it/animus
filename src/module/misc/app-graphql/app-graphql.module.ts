@@ -20,7 +20,11 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
       validationRules: [maxDepth(MAX_QUERY_DEPTH)],
       context: ({ req, res }) => ({ req, res }),
       formatError: (error: GraphQLError) => {
-        return error.extensions.response as GraphQLError;
+        return (
+          (error.extensions.response as GraphQLError) ?? {
+            message: error.message,
+          }
+        );
       },
     }),
   ],

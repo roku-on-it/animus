@@ -3,6 +3,7 @@ import { Substructure } from 'src/module/shared/model/substructure';
 import { BeforeInsert, Column, Entity, Index } from 'typeorm';
 import { UserRole } from 'src/module/user/model/enum/user-role';
 import { hash } from 'bcrypt';
+import { UserWithAuth } from './flag/user-with-auth';
 
 @ObjectType()
 @Entity()
@@ -31,4 +32,6 @@ export class User extends Substructure {
   private async beforeWrite() {
     this.password = await hash(this.password, 12);
   }
+
+  static withAuth = UserWithAuth;
 }

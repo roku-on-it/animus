@@ -3,8 +3,8 @@ import { BullModule } from '@nestjs/bull';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { QueueOptions } from 'bull';
 import { QueueType } from 'src/module/misc/app-queue/type/queue-type.enum';
-import { RegisterProducerService } from 'src/module/auth/service/register.producer.service';
-import { RegisterConsumer } from 'src/module/auth/service/consumer/register.consumer';
+import { RegisterProducerService } from 'src/module/misc/app-queue/service/register.producer.service';
+import { RegisterConsumer } from 'src/module/misc/app-queue/consumer/register.consumer';
 
 @Module({
   imports: [

@@ -4,7 +4,7 @@ import { Queue } from 'bull';
 import { QueueType } from 'src/module/misc/app-queue/type/queue-type.enum';
 import { JobType } from 'src/module/misc/app-queue/type/job-type.num';
 import { CreateUser } from 'src/module/user/input/create-user';
-import { User } from '../../user/model/user';
+import { User } from '../../../user/model/user';
 
 @Injectable()
 export class RegisterProducerService {

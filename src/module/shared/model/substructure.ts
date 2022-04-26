@@ -3,6 +3,10 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   EntityNotFoundError,
+  FindConditions,
+  FindOneOptions,
+  ObjectID,
+  ObjectType as ObjectType$,
   PrimaryGeneratedColumn,
   SaveOptions,
   UpdateDateColumn,
@@ -30,6 +34,29 @@ export class Substructure extends BaseEntity {
   @Field(() => GraphQLTimestamp, { nullable: true })
   @DeleteDateColumn()
   deletedAt: Date;
+
+  static findOneOrFail<T extends BaseEntity>(
+    this: ObjectType$<T>,
+    id?: string | number | Date | ObjectID,
+    options?: FindOneOptions<T>,
+  ): Promise<T>;
+
+  /**
+   * Finds first entity that matches given options.
+   */
+  static findOneOrFail<T extends BaseEntity>(
+    this: ObjectType$<T>,
+    options?: FindOneOptions<T>,
+  ): Promise<T>;
+
+  /**
+   * Finds first entity that matches given conditions.
+   */
+  static findOneOrFail<T extends BaseEntity>(
+    this: ObjectType$<T>,
+    conditions?: FindConditions<T>,
+    options?: FindOneOptions<T>,
+  ): Promise<T>;
 
   static findOneOrFail(...args) {
     if (args[0] instanceof Substructure) {

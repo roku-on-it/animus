@@ -11,10 +11,11 @@ import {
   SaveOptions,
   UpdateDateColumn,
 } from 'typeorm';
-import { Field, GraphQLISODateTime, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { plainToClassFromExist } from 'class-transformer';
 import { UpdateModel } from 'src/module/shared/input/update-model';
 import { ConflictException, NotFoundException } from '@nestjs/common';
+import { GraphQLTimestamp } from '@nestjs/graphql/dist/scalars/timestamp.scalar';
 
 @ObjectType()
 export class Substructure extends BaseEntity {
@@ -22,34 +23,24 @@ export class Substructure extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Field(() => GraphQLISODateTime)
+  @Field(() => GraphQLTimestamp)
   @CreateDateColumn()
   createdAt: Date;
 
-  @Field(() => GraphQLISODateTime)
+  @Field(() => GraphQLTimestamp, { nullable: true })
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Field(() => GraphQLISODateTime, { nullable: true })
+  @Field(() => GraphQLTimestamp, { nullable: true })
   @DeleteDateColumn()
   deletedAt: Date;
-
-  save(options?: SaveOptions): Promise<this> {
-    return super.save(options).catch((error) => {
-      if ('23505' === error?.code) {
-        // 23505 is UniqueViolation error code for Postgres
-        throw new ConflictException();
-      }
-
-      return this;
-    });
-  }
 
   static findOneOrFail<T extends BaseEntity>(
     this: ObjectType$<T>,
     id?: string | number | Date | ObjectID,
     options?: FindOneOptions<T>,
   ): Promise<T>;
+
   /**
    * Finds first entity that matches given options.
    */
@@ -57,6 +48,7 @@ export class Substructure extends BaseEntity {
     this: ObjectType$<T>,
     options?: FindOneOptions<T>,
   ): Promise<T>;
+
   /**
    * Finds first entity that matches given conditions.
    */
@@ -93,5 +85,16 @@ export class Substructure extends BaseEntity {
     await plainToClassFromExist(entity, payload).save();
 
     return entity as unknown as U;
+  }
+
+  save(options?: SaveOptions): Promise<this> {
+    return super.save(options).catch((error) => {
+      if ('23505' === error?.code) {
+        // 23505 is UniqueViolation error code for Postgres
+        throw new ConflictException();
+      }
+
+      return this;
+    });
   }
 }

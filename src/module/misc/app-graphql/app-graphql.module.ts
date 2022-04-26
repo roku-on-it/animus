@@ -12,7 +12,6 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
-      cors: false,
       sortSchema: true,
       autoSchemaFile: true,
       driver: ApolloDriver,

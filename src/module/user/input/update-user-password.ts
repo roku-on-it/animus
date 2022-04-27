@@ -10,11 +10,6 @@ export class UpdateUserPassword {
 
   @Field()
   @IsPassword()
-  @Match('password')
-  confirmPassword: string;
-
-  @Field()
-  @IsPassword()
   newPassword: string;
 
   @Field()

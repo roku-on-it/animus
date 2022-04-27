@@ -17,6 +17,7 @@ import { GQLContext } from 'src/module/shared/interface/gql-context';
 import { UserList } from 'src/module/user/model/user-list';
 import { Authorize } from '../auth/decorator/authorize';
 import { UserRole } from './model/enum/user-role';
+import { DeleteMe } from './input/delete-me';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -86,21 +87,31 @@ export class UserResolver {
     );
 
     if (!passMatch) {
-      throw new UnauthorizedException();
+      throw new ForbiddenException();
     }
 
     const newPassword = await hash(payload.newPassword, 12);
-    await plainToClassFromExist(currentUser, {
+
+    return plainToClassFromExist(currentUser, {
       password: newPassword,
     }).save();
-    return currentUser;
   }
 
   @Mutation(() => User)
   async deleteMe(
     @CurrentUser() currentUser: User,
     @Context() context: GQLContext,
+    @Payload() payload: DeleteMe,
   ): Promise<User> {
+    const passMatch = await this.authService.comparePasswords(
+      payload.password,
+      currentUser.password,
+    );
+
+    if (!passMatch) {
+      throw new ForbiddenException('Wrong password');
+    }
+
     await this.authService.logoutAndDestroySession(context);
     return currentUser.softRemove();
   }

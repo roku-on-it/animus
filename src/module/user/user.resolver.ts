@@ -31,9 +31,7 @@ export class UserResolver {
 
   @Authorize(UserRole.User)
   @Query(() => UserList)
-  async users(
-    @Args('filter', { nullable: true }) filter: ListUser,
-  ): Promise<UserList> {
+  async users(@Payload('filter', true) filter: ListUser): Promise<UserList> {
     return filter.find();
   }
 

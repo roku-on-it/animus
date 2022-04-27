@@ -4,8 +4,8 @@ import { CurrentUser } from 'src/module/shared/decorator/param/current-user';
 import { UpdateUser } from 'src/module/user/input/update-user';
 import { ListUser } from 'src/module/user/input/list-user';
 import { DeleteUser } from 'src/module/user/input/delete-user';
-import { ForbiddenException, UnauthorizedException } from '@nestjs/common';
-import { UpdateUserPassword } from 'src/module/user/input/update-user-password';
+import { ForbiddenException } from '@nestjs/common';
+import { UpdateMyPassword } from 'src/module/user/input/update-my-password';
 import { plainToClassFromExist } from 'class-transformer';
 import { AuthService } from 'src/module/auth/service/auth.service';
 import { hash } from 'bcrypt';
@@ -79,7 +79,7 @@ export class UserResolver {
   @Mutation(() => User)
   async updateMyPassword(
     @CurrentUser() currentUser: User,
-    @Payload() payload: UpdateUserPassword,
+    @Payload() payload: UpdateMyPassword,
   ): Promise<User> {
     const passMatch = await this.authService.comparePasswords(
       payload.password,

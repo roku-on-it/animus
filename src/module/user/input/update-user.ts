@@ -14,11 +14,6 @@ export class UpdateUser extends UpdateModel {
   @Length(3, 32)
   username: string;
 
-  @OptionalField()
-  @Trim()
-  @Length(3, 60)
-  fullName: string;
-
   @OptionalField(() => UserRole)
   @IsEnum(UserRole)
   role: UserRole;

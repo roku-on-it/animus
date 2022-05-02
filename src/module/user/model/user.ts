@@ -14,10 +14,6 @@ export class User extends Substructure {
   @Column()
   username: string;
 
-  @Field()
-  @Column()
-  fullName: string;
-
   @Column()
   password: string;
 

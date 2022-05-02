@@ -15,10 +15,7 @@ export class ListUser extends ListType {
     const [items, total] = await User.findAndCount({
       skip: this.pageIndex * this.pageSize,
       take: this.pageSize ?? 5,
-      where: [
-        { username: ILike('%' + this.query + '%') },
-        { fullName: ILike('%' + this.query + '%') },
-      ],
+      where: [{ username: ILike('%' + this.query + '%') }],
       loadRelationIds: true,
       ...options,
     });

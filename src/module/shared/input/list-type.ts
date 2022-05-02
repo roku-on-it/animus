@@ -1,15 +1,14 @@
-import { Field, InputType } from '@nestjs/graphql';
-import { IsOptional, Max, Min } from 'class-validator';
+import { InputType } from '@nestjs/graphql';
+import { Max, Min } from 'class-validator';
+import { OptionalField } from '../decorator/property/optional-field';
 
 @InputType()
 export class ListType {
-  @Field({ nullable: true })
-  @IsOptional()
+  @OptionalField()
   @Min(0)
   pageIndex: number;
 
-  @Field({ nullable: true })
-  @IsOptional()
+  @OptionalField()
   @Max(50)
   @Min(1)
   pageSize: number;

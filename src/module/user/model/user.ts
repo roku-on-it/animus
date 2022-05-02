@@ -18,7 +18,7 @@ export class User extends Substructure {
   password: string;
 
   @Field(() => UserRole)
-  @Column({ type: 'enum', enum: UserRole, default: UserRole.User })
+  @Column({ type: 'enum', enum: UserRole, default: UserRole.Guest })
   role: UserRole;
 
   @OneToOne(() => TrueBlue, (tb) => tb.user, { nullable: false })

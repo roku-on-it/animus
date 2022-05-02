@@ -1,9 +1,10 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Substructure } from 'src/module/shared/model/substructure';
-import { BeforeInsert, Column, Entity, Index } from 'typeorm';
+import { BeforeInsert, Column, Entity, Index, OneToOne } from 'typeorm';
 import { UserRole } from 'src/module/user/model/enum/user-role';
 import { hash } from 'bcrypt';
 import { UserWithAuth } from './flag/user-with-auth';
+import { TrueBlue } from '../../true-blue/model/true-blue';
 
 @ObjectType()
 @Entity()
@@ -27,6 +28,9 @@ export class User extends Substructure {
   @Field(() => UserRole)
   @Column({ type: 'enum', enum: UserRole, default: UserRole.User })
   role: UserRole;
+
+  @OneToOne(() => TrueBlue, (tb) => tb.user, { nullable: false })
+  trueBlue: TrueBlue;
 
   @BeforeInsert()
   private async beforeWrite() {

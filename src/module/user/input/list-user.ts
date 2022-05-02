@@ -2,7 +2,6 @@ import { Field, InputType } from '@nestjs/graphql';
 import { FindManyOptions, ILike } from 'typeorm';
 import { User } from 'src/module/user/model/user';
 import { UserList } from 'src/module/user/model/user-list';
-import { IsOptional, Max, Min } from 'class-validator';
 import { ListType } from '../../shared/input/list-type';
 
 @InputType()

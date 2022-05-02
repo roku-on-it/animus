@@ -1,4 +1,4 @@
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { User } from 'src/module/user/model/user';
 import { CurrentUser } from 'src/module/shared/decorator/param/current-user';
 import { UpdateUser } from 'src/module/user/input/update-user';

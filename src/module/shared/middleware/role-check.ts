@@ -1,11 +1,7 @@
 import { FieldMiddleware, MiddlewareContext, NextFn } from '@nestjs/graphql';
 import { User } from 'src/module/user/model/user';
 import { GQLContext } from 'src/module/shared/interface/gql-context';
-import {
-  ForbiddenException,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 
 export const roleCheck: FieldMiddleware = async (
   { info, context }: MiddlewareContext,
@@ -23,18 +19,21 @@ export const roleCheck: FieldMiddleware = async (
   }
 
   const user = await User.createQueryBuilder('user')
-    .select('user.role')
-    .where('user.id = :id', { id: session.userId })
+    .where({ id: session.userId })
+    .select(['user.role', 'trueBlue.id'])
+    .leftJoin('user.trueBlue', 'trueBlue')
     .getOne();
 
   if (null == user) {
     throw new NotFoundException();
   }
 
+  if (null != user.trueBlue) {
+    return next();
+  }
+
   if (user.role < role) {
-    throw new ForbiddenException(
-      'Insufficient permission to access ' + info.fieldName,
-    );
+    return null;
   }
 
   return next();

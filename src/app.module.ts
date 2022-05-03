@@ -6,6 +6,7 @@ import { AuthModule } from 'src/module/auth/auth.module';
 import { AppThrottleModule } from 'src/module/misc/app-throttle/app-throttle.module';
 import { UserModule } from './module/user/user.module';
 import { TrueBlueModule } from './module/true-blue/true-blue.module';
+import { PersonModule } from './module/person/person.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { TrueBlueModule } from './module/true-blue/true-blue.module';
     AppThrottleModule,
     TrueBlueModule,
     UserModule,
+    PersonModule,
   ],
 })
 export class AppModule {}

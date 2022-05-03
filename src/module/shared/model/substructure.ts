@@ -94,7 +94,7 @@ export class Substructure extends BaseEntity {
         throw new ConflictException();
       }
 
-      return this;
+      throw error;
     });
   }
 }

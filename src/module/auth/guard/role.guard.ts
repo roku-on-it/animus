@@ -37,6 +37,6 @@ export class RoleGuard implements CanActivate {
       throw new UnauthorizedException();
     }
 
-    return user.role >= role ?? user.trueBlue.hasTrueRootPrivilege;
+    return user.role >= role ?? user.trueBlue?.hasTrueRootPrivilege;
   }
 }

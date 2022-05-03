@@ -30,7 +30,7 @@ export class RoleGuard implements CanActivate {
     const user = await User.createQueryBuilder('user')
       .where({ id: session.userId })
       .select(['user.role', 'trueBlue.hasTrueRootPrivilege'])
-      .leftJoin('user.trueBlue', 'trueBlue') // bar is the joined table
+      .leftJoin('user.trueBlue', 'trueBlue')
       .getOne();
 
     if (null == user) {

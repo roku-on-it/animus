@@ -1,4 +1,4 @@
-import { Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Context, Mutation, Parent, Query, Resolver } from '@nestjs/graphql';
 import { User } from 'src/module/user/model/user';
 import { CurrentUser } from 'src/module/shared/decorator/param/current-user';
 import { UpdateUser } from 'src/module/user/input/update-user';
@@ -18,6 +18,9 @@ import { UserList } from 'src/module/user/model/user-list';
 import { Authorize } from '../auth/decorator/authorize';
 import { UserRole } from './model/enum/user-role';
 import { DeleteMe } from './input/delete-me';
+import { PersonList } from '../person/model/person-list';
+import { ListPerson } from '../person/input/list-person';
+import { ProtectedResolveField } from '../shared/decorator/method/protected-resolve-field';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -121,5 +124,16 @@ export class UserResolver {
     @Payload() payload: UpdateMe,
   ): Promise<User> {
     return plainToClassFromExist(currentUser, payload).save();
+  }
+
+  @ProtectedResolveField(() => PersonList)
+  async persons(
+    @Parent() createdBy: User,
+    @Payload('filter', true) filter: ListPerson,
+  ): Promise<PersonList> {
+    return filter.find({
+      where: { createdBy },
+      loadRelationIds: true,
+    });
   }
 }

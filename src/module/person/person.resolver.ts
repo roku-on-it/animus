@@ -16,9 +16,14 @@ import { User } from '../user/model/user';
 import { PersonList } from './model/person-list';
 import { DeletePerson } from './input/delete-person';
 import { UpdatePerson } from './input/update-person';
+import { AddAcquaintance } from './input/add-acquaintance';
+import { PersonService } from './service/person.service';
+import { RemoveAcquaintance } from './input/remove-acquaintance';
 
 @Resolver(() => Person)
 export class PersonResolver {
+  constructor(readonly personService: PersonService) {}
+
   @Query(() => Person)
   async person(@Id() id): Promise<Person> {
     return Person.findOneOrFail({ id }, { loadRelationIds: true });
@@ -48,6 +53,18 @@ export class PersonResolver {
   async deletePerson(@Payload() payload: DeletePerson): Promise<Person> {
     const person = await Person.findOneOrFail(payload.id);
     return person.softRemove();
+  }
+
+  @Mutation(() => Person)
+  async addAcquaintance(@Payload() payload: AddAcquaintance): Promise<Person> {
+    return this.personService.addAcquaintance(payload);
+  }
+
+  @Mutation(() => Person)
+  async removeAcquaintance(
+    @Payload() payload: RemoveAcquaintance,
+  ): Promise<Person> {
+    return this.personService.removeAcquaintance(payload);
   }
 
   @ResolveField(() => [Person])

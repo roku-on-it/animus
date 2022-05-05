@@ -31,11 +31,14 @@ export class User extends Substructure {
   @Column({ type: 'enum', enum: UserRole, default: UserRole.Guest })
   role: UserRole;
 
-  @OneToOne(() => TrueBlue, (tb) => tb.user, { nullable: false })
+  @OneToOne(() => TrueBlue, (tb) => tb.user, { nullable: false, cascade: true })
   trueBlue: TrueBlue;
 
   @ProtectedField(UserRole.Root, () => PersonList, { nullable: true })
-  @OneToMany(() => Person, (p) => p.createdBy, { nullable: true })
+  @OneToMany(() => Person, (p) => p.createdBy, {
+    nullable: true,
+    cascade: true,
+  })
   persons: Person[];
 
   @BeforeInsert()

@@ -61,7 +61,9 @@ export class UserResolver {
     @CurrentUser() currentUser: User,
     @Payload() payload: DeleteUser,
   ): Promise<User> {
-    const user = await User.findOneOrFail(payload.id);
+    const user = await User.findOneOrFail(payload.id, {
+      relations: ['persons', 'trueBlue'],
+    });
 
     if (currentUser.role <= user.role) {
       throw new ForbiddenException('Insufficient permission');

@@ -3,10 +3,13 @@ import { FindManyOptions, ILike } from 'typeorm';
 import { ListType } from '../../shared/input/list-type';
 import { PersonList } from '../model/person-list';
 import { Person } from '../model/person';
+import { MinLength, ValidateIf } from 'class-validator';
 
 @InputType()
 export class ListPerson extends ListType {
   @Field(() => String, { nullable: true })
+  @MinLength(3)
+  @ValidateIf((target: ListPerson) => target.query.length > 0)
   query = '';
 
   async find(options?: FindManyOptions): Promise<PersonList> {

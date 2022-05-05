@@ -13,8 +13,6 @@ export class ListUser extends ListType {
   query = '';
 
   async find(options?: FindManyOptions): Promise<UserList> {
-    this.query = this.query.length > 2 ? this.query : '';
-
     const [items, total] = await User.findAndCount({
       skip: this.pageIndex * this.pageSize,
       take: this.pageSize ?? 5,

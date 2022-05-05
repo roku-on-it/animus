@@ -14,6 +14,8 @@ import { ListPerson } from './input/list-person';
 import { CurrentUser } from '../shared/decorator/param/current-user';
 import { User } from '../user/model/user';
 import { PersonList } from './model/person-list';
+import { DeletePerson } from './input/delete-person';
+import { UpdatePerson } from './input/update-person';
 
 @Resolver(() => Person)
 export class PersonResolver {
@@ -30,11 +32,22 @@ export class PersonResolver {
   }
 
   @Mutation(() => Person)
-  createPerson(
+  async createPerson(
     @CurrentUser() createdBy: User,
     @Payload() payload: CreatePerson,
   ): Promise<Person> {
     return plainToInstance(Person, { createdBy, ...payload }).save();
+  }
+
+  @Mutation(() => Person)
+  async updatePerson(@Payload() payload: UpdatePerson): Promise<Person> {
+    return Person.findOneAndUpdate(payload);
+  }
+
+  @Mutation(() => Person)
+  async deletePerson(@Payload() payload: DeletePerson): Promise<Person> {
+    const person = await Person.findOneOrFail(payload.id);
+    return person.softRemove();
   }
 
   @ResolveField(() => [Person])

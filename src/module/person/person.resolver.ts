@@ -22,7 +22,7 @@ import { RemoveAcquaintance } from './input/remove-acquaintance';
 
 @Resolver(() => Person)
 export class PersonResolver {
-  constructor(readonly personService: PersonService) {}
+  constructor(private personService: PersonService) {}
 
   @Query(() => Person)
   async person(@Id() id): Promise<Person> {

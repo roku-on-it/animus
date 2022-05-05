@@ -19,6 +19,7 @@ import { UpdatePerson } from './input/update-person';
 import { AddAcquaintance } from './input/add-acquaintance';
 import { PersonService } from './service/person.service';
 import { RemoveAcquaintance } from './input/remove-acquaintance';
+import { PhysicalAppearance } from '../physical-appearance/model/physical-appearance';
 
 @Resolver(() => Person)
 export class PersonResolver {
@@ -80,5 +81,18 @@ export class PersonResolver {
   @ResolveField(() => User)
   async createdBy(@Parent() person: Person): Promise<User> {
     return User.findOneOrFail(person.createdBy);
+  }
+
+  @ResolveField(() => PhysicalAppearance)
+  async physicalAppearance(
+    @Parent() person: Person,
+  ): Promise<PhysicalAppearance> {
+    if (null == person.physicalAppearance) {
+      return null;
+    }
+
+    return PhysicalAppearance.findOneOrFail({
+      where: { person },
+    });
   }
 }

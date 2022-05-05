@@ -8,6 +8,7 @@ import { UserModule } from './module/user/user.module';
 import { TrueBlueModule } from './module/true-blue/true-blue.module';
 import { PersonModule } from './module/person/person.module';
 import { getManager } from 'typeorm';
+import { PhysicalAppearanceModule } from './module/physical-appearance/physical-appearance.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { getManager } from 'typeorm';
     TrueBlueModule,
     UserModule,
     PersonModule,
+    PhysicalAppearanceModule,
   ],
 })
 export class AppModule implements OnModuleInit {

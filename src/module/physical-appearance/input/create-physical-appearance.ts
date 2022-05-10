@@ -4,7 +4,7 @@ import { Gender } from '../model/enum/gender';
 import { SkinColor } from '../model/enum/skin-color';
 import { EyeColor } from '../model/enum/eye-color';
 import { OptionalField } from '../../shared/decorator/property/optional-field';
-import { IsPositive, Max, MinLength } from 'class-validator';
+import { ArrayMinSize, IsPositive, Max, MinLength } from 'class-validator';
 import { RefInput } from '../../shared/input/ref-input';
 import { Person } from '../../person/model/person';
 
@@ -25,6 +25,7 @@ export class CreatePhysicalAppearance {
 
   @OptionalField(() => [String])
   @MinLength(3, { each: true })
+  @ArrayMinSize(1)
   disabilities: string[];
 
   @OptionalField(() => SexualOrientation)

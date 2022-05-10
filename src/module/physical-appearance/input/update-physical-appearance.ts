@@ -4,7 +4,7 @@ import { Gender } from '../model/enum/gender';
 import { SkinColor } from '../model/enum/skin-color';
 import { EyeColor } from '../model/enum/eye-color';
 import { OptionalField } from '../../shared/decorator/property/optional-field';
-import { IsPositive, Max, MinLength } from 'class-validator';
+import { ArrayMinSize, IsPositive, Max, MinLength } from 'class-validator';
 import { UpdateModel } from '../../shared/input/update-model';
 
 @InputType()
@@ -24,6 +24,7 @@ export class UpdatePhysicalAppearance extends UpdateModel {
 
   @OptionalField(() => [String])
   @MinLength(3, { each: true })
+  @ArrayMinSize(1)
   disabilities: string[];
 
   @OptionalField(() => SexualOrientation)

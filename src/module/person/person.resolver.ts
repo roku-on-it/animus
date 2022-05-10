@@ -42,7 +42,14 @@ export class PersonResolver {
     @CurrentUser() createdBy: User,
     @Payload() payload: CreatePerson,
   ): Promise<Person> {
-    return plainToInstance(Person, { createdBy, ...payload }).save();
+    const person = await plainToInstance(Person, {
+      createdBy,
+      ...payload,
+    }).save();
+
+    await plainToInstance(PhysicalAppearance, { person }).save();
+
+    return person;
   }
 
   @Mutation(() => Person)

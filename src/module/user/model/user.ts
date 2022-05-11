@@ -39,7 +39,7 @@ export class User extends Substructure {
   persons: Person[];
 
   @BeforeInsert()
-  private async beforeWrite() {
+  private async beforeWrite(): Promise<void> {
     this.password = await hash(this.password, 12);
   }
 

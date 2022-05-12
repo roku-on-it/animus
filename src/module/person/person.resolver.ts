@@ -88,11 +88,15 @@ export class PersonResolver {
   async physicalAppearance(
     @Parent() person: Person,
   ): Promise<PhysicalAppearance> {
-    return PhysicalAppearance.findOneOrFail(person.physicalAppearance);
+    return PhysicalAppearance.findOneOrFail({
+      where: { person },
+    });
   }
 
   @ResolveField(() => Identity)
   async identity(@Parent() person: Person): Promise<Identity> {
-    return Identity.findOneOrFail(person.identity);
+    return Identity.findOneOrFail({
+      where: { person },
+    });
   }
 }

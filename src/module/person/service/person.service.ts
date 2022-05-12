@@ -17,9 +17,9 @@ export class PersonService {
     payload.acquaintance.id = +payload.acquaintance.id;
     payload.person.id = +payload.person.id;
 
-    const alreadyKnows = person.acquaintances.some((a) => {
-      return a.id === payload.acquaintance.id;
-    });
+    const alreadyKnows = person.acquaintances.some(
+      (a) => a.id === payload.acquaintance.id,
+    );
 
     if (alreadyKnows) {
       throw new ConflictException();
@@ -45,15 +45,19 @@ export class PersonService {
 
     const acquaintance = await Person.findOneOrFail(payload.acquaintance);
 
-    if (
-      acquaintance.id == payload.person.id ||
-      !person.acquaintances.map((a) => a.id).includes(+payload.acquaintance.id)
-    ) {
+    payload.acquaintance.id = +payload.acquaintance.id;
+    payload.person.id = +payload.person.id;
+
+    const knowsAcquaintance = person.acquaintances.some(
+      (a) => a.id === payload.acquaintance.id,
+    );
+
+    if (acquaintance.id == payload.person.id || !knowsAcquaintance) {
       throw new BadRequestException();
     }
 
     person.acquaintances = person.acquaintances.filter(
-      (a) => a.id != payload.acquaintance.id,
+      (a) => a.id !== payload.acquaintance.id,
     );
 
     return person.save();

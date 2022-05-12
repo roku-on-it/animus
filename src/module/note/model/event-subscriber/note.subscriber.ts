@@ -24,6 +24,7 @@ export class NoteSubscriber implements EntitySubscriberInterface<Note> {
 
     const existingNote = await event.manager.getRepository(Note).findOne({
       where: { person },
+      select: ['position'],
       order: { position: 'DESC' },
     });
 

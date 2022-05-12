@@ -10,11 +10,12 @@ import { PersonModule } from './module/person/person.module';
 import { PhysicalAppearanceModule } from './module/physical-appearance/physical-appearance.module';
 import { IdentityModule } from './module/identity/identity.module';
 import { AddressModule } from './module/address/address.module';
+import { NoteModule } from './module/note/note.module';
 
 // TODO: Add birthDate column to Identity after starting Angular Project.
 // TODO: Specify the lengths of text based fields.
-// TODO: Refactor *Length & co-related decorators after specifying text length
-// TODO: Add `filter` to @ResolveField decorated methods
+// TODO: Refactor @*Length & co-related decorators after specifying text length
+// TODO: Refactor @ResolveField decorated methods to return list-*.find();
 // TODO: Refactor `query` field from String into Enum<T>
 
 @Module({
@@ -30,6 +31,7 @@ import { AddressModule } from './module/address/address.module';
     PhysicalAppearanceModule,
     IdentityModule,
     AddressModule,
+    NoteModule,
   ],
 })
 export class AppModule {}

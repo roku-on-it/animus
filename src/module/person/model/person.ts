@@ -6,11 +6,13 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   OneToOne,
 } from 'typeorm';
 import { User } from '../../user/model/user';
 import { PhysicalAppearance } from '../../physical-appearance/model/physical-appearance';
 import { Identity } from '../../identity/model/identity';
+import { Address } from '../../address/model/address';
 
 @ObjectType()
 @Entity()
@@ -39,4 +41,8 @@ export class Person extends Substructure {
   @Field(() => Identity, { nullable: true })
   @OneToOne(() => Identity, (i) => i.person, { nullable: true })
   identity: Identity;
+
+  @Field(() => [Address])
+  @OneToMany(() => Address, (a) => a.person, { nullable: true })
+  addresses: Address[];
 }

@@ -22,7 +22,6 @@ import { RemoveAcquaintance } from './input/remove-acquaintance';
 import { PhysicalAppearance } from '../physical-appearance/model/physical-appearance';
 import { Identity } from '../identity/model/identity';
 import { Address } from '../address/model/address';
-import { AddressList } from '../address/model/address-list';
 
 @Resolver(() => Person)
 export class PersonResolver {
@@ -102,7 +101,7 @@ export class PersonResolver {
     });
   }
 
-  @ResolveField(() => [AddressList])
+  @ResolveField(() => [Address])
   async addresses(@Parent() person: Person): Promise<Address[]> {
     return Address.find({ where: { person }, loadRelationIds: true });
   }

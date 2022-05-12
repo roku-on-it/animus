@@ -12,11 +12,12 @@ import { IdentityModule } from './module/identity/identity.module';
 import { AddressModule } from './module/address/address.module';
 import { NoteModule } from './module/note/note.module';
 
-// TODO: Add birthDate column to Identity after starting Angular Project.
-// TODO: Specify the lengths of text based fields.
+// TODO: Add birthDate column to Identity after starting Angular Project
+// TODO: Specify the lengths of text based fields
 // TODO: Refactor @*Length & co-related decorators after specifying text length
 // TODO: Refactor @ResolveField decorated methods to return list-*.find();
 // TODO: Refactor `query` field from String into Enum<T>
+// TODO: Add proper missing authorization & authentication to entity's resolver methods
 
 @Module({
   imports: [

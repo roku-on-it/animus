@@ -14,9 +14,12 @@ export class PersonService {
       relations: ['acquaintances'],
     });
 
-    const alreadyKnows = person.acquaintances.some(
-      (a) => a.id == payload.acquaintance.id,
-    );
+    payload.acquaintance.id = +payload.acquaintance.id;
+    payload.person.id = +payload.person.id;
+
+    const alreadyKnows = person.acquaintances.some((a) => {
+      return a.id === payload.acquaintance.id;
+    });
 
     if (alreadyKnows) {
       throw new ConflictException();

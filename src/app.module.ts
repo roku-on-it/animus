@@ -10,6 +10,8 @@ import { PersonModule } from './module/person/person.module';
 import { PhysicalAppearanceModule } from './module/physical-appearance/physical-appearance.module';
 import { IdentityModule } from './module/identity/identity.module';
 
+// TODO: Add birthDate column to Identity after starting Angular Project.
+
 @Module({
   imports: [
     AuthModule,

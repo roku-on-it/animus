@@ -14,6 +14,7 @@ import { AddressModule } from './module/address/address.module';
 // TODO: Add birthDate column to Identity after starting Angular Project.
 // TODO: Specify the lengths of text based fields.
 // TODO: Refactor *Length & co-related decorators after specifying text length
+// TODO: Add `filter` to @ResolveField decorated methods
 
 @Module({
   imports: [

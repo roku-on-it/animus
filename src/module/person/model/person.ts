@@ -13,6 +13,7 @@ import { User } from '../../user/model/user';
 import { PhysicalAppearance } from '../../physical-appearance/model/physical-appearance';
 import { Identity } from '../../identity/model/identity';
 import { Address } from '../../address/model/address';
+import { Note } from '../../note/model/note';
 
 @ObjectType()
 @Entity()
@@ -25,24 +26,22 @@ export class Person extends Substructure {
   @Column({ nullable: true })
   description: string;
 
-  @Field(() => User)
   @ManyToOne(() => User, (u) => u.persons, { nullable: true })
   createdBy: User;
 
-  @Field(() => [Person], { nullable: true })
   @ManyToMany(() => Person, (p) => p.acquaintances, { nullable: true })
   @JoinTable()
   acquaintances: Person[];
 
-  @Field(() => PhysicalAppearance, { nullable: true })
   @OneToOne(() => PhysicalAppearance, (p) => p.person, { nullable: true })
   physicalAppearance: PhysicalAppearance;
 
-  @Field(() => Identity, { nullable: true })
   @OneToOne(() => Identity, (i) => i.person, { nullable: true })
   identity: Identity;
 
-  @Field(() => [Address])
   @OneToMany(() => Address, (a) => a.person, { nullable: true })
   addresses: Address[];
+
+  @OneToMany(() => Note, (n) => n.person, { nullable: true })
+  notes: Note[];
 }

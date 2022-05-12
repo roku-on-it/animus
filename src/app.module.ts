@@ -9,9 +9,11 @@ import { TrueBlueModule } from './module/true-blue/true-blue.module';
 import { PersonModule } from './module/person/person.module';
 import { PhysicalAppearanceModule } from './module/physical-appearance/physical-appearance.module';
 import { IdentityModule } from './module/identity/identity.module';
+import { AddressModule } from './module/address/address.module';
 
 // TODO: Add birthDate column to Identity after starting Angular Project.
 // TODO: Specify the lengths of text based fields.
+// TODO: Refactor *Length & co-related decorators after specifying text length
 
 @Module({
   imports: [
@@ -25,6 +27,7 @@ import { IdentityModule } from './module/identity/identity.module';
     PersonModule,
     PhysicalAppearanceModule,
     IdentityModule,
+    AddressModule,
   ],
 })
 export class AppModule {}

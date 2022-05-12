@@ -19,7 +19,7 @@ import { getManager } from 'typeorm';
         password: configService.get('POSTGRES_PASSWORD'),
         database: configService.get('POSTGRES_DATABASE'),
         entities: ['dist/**/model/*.{ts,js}'],
-        subscribers: ['dist/**/*.subscriber.{ts,js}'],
+        subscribers: ['dist/**/model/event-subscriber/*.subscriber.{ts,js}'],
         dropSchema: /true/i.test(configService.get('DB_DROP_SCHEMA')),
         synchronize: /true/i.test(configService.get('DB_SYNCHRONIZE')),
         logging: /true/i.test(configService.get('DB_LOGGING')),

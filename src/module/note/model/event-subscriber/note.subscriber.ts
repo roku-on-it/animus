@@ -13,25 +13,28 @@ export class NoteSubscriber implements EntitySubscriberInterface<Note> {
     return Note;
   }
 
-  async beforeInsert(event: InsertEvent<Note>): Promise<void> {
-    const person = await event.manager
+  async beforeInsert({
+    manager,
+    entity: note,
+  }: InsertEvent<Note>): Promise<void> {
+    const person = await manager
       .getRepository(Person)
-      .findOne({ id: event.entity.person.id });
+      .findOne({ id: note.person.id });
 
     if (null == person) {
       throw new NotFoundException(Person.name + ' not found');
     }
 
-    const existingNote = await event.manager.getRepository(Note).findOne({
+    const noteWithLargestPosition = await manager.getRepository(Note).findOne({
       where: { person },
       select: ['position'],
       order: { position: 'DESC' },
     });
 
-    if (null == existingNote) {
-      event.entity.position = 0;
+    if (null == noteWithLargestPosition) {
+      note.position = 0;
     } else {
-      event.entity.position = existingNote.position + 1;
+      note.position = noteWithLargestPosition.position + 1;
     }
   }
 }

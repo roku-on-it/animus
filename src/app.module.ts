@@ -15,6 +15,7 @@ import { AddressModule } from './module/address/address.module';
 // TODO: Specify the lengths of text based fields.
 // TODO: Refactor *Length & co-related decorators after specifying text length
 // TODO: Add `filter` to @ResolveField decorated methods
+// TODO: Refactor `query` field from String into Enum<T>
 
 @Module({
   imports: [

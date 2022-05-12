@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { User } from '../../user/model/user';
 import { PhysicalAppearance } from '../../physical-appearance/model/physical-appearance';
+import { Identity } from '../../identity/model/identity';
 
 @ObjectType()
 @Entity()
@@ -34,4 +35,8 @@ export class Person extends Substructure {
   @Field(() => PhysicalAppearance, { nullable: true })
   @OneToOne(() => PhysicalAppearance, (p) => p.person, { nullable: true })
   physicalAppearance: PhysicalAppearance;
+
+  @Field(() => Identity, { nullable: true })
+  @OneToOne(() => Identity, (i) => i.person, { nullable: true })
+  identity: Identity;
 }

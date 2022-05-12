@@ -1,7 +1,8 @@
-import { Module } from '@nestjs/common';
+import { Module, OnModuleInit } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import { getManager } from 'typeorm';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
         password: configService.get('POSTGRES_PASSWORD'),
         database: configService.get('POSTGRES_DATABASE'),
         entities: ['dist/**/model/*.{ts,js}'],
+        subscribers: ['dist/**/*.subscriber.{ts,js}'],
         dropSchema: /true/i.test(configService.get('DB_DROP_SCHEMA')),
         synchronize: /true/i.test(configService.get('DB_SYNCHRONIZE')),
         logging: /true/i.test(configService.get('DB_LOGGING')),
@@ -26,4 +28,15 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
   ],
   exports: [TypeOrmModule],
 })
-export class AppTypeormModule {}
+export class AppTypeormModule implements OnModuleInit {
+  async onModuleInit(): Promise<void> {
+    await getManager().query(`
+    ALTER TABLE person_acquaintances_person
+    DROP CONSTRAINT IF EXISTS cannot_know_self;
+    
+    ALTER TABLE person_acquaintances_person
+    ADD CONSTRAINT cannot_know_self
+    CHECK ("personId_1" <> "personId_2");
+     `);
+  }
+}

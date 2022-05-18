@@ -2,6 +2,7 @@ import {
   EntitySubscriberInterface,
   EventSubscriber,
   InsertEvent,
+  UpdateEvent,
 } from 'typeorm';
 import { Note } from '../note';
 import { Person } from '../../../person/model/person';
@@ -33,5 +34,37 @@ export class NoteSubscriber implements EntitySubscriberInterface<Note> {
     } else {
       entity.position = noteWithLargestPosition.position + 1;
     }
+  }
+
+  async beforeUpdate({
+    entity,
+    databaseEntity,
+    manager,
+  }: UpdateEvent<Note>): Promise<void> {
+    if (
+      entity.content === databaseEntity.content &&
+      entity.position === databaseEntity.position
+    ) {
+      return;
+    }
+
+    const noteToBeSwitched = await manager.getRepository(Note).findOne({
+      where: {
+        person: entity.person,
+        position: entity.position,
+      },
+      select: ['id'],
+    });
+
+    if (null == noteToBeSwitched) {
+      throw new NotFoundException('Note to be repositioned could not be found');
+    }
+
+    await manager
+      .createQueryBuilder()
+      .update(Note, { position: databaseEntity.position })
+      .where('id = :id', { id: noteToBeSwitched.id })
+      .callListeners(false)
+      .execute();
   }
 }

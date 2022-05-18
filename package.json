@@ -46,6 +46,7 @@
     "helmet": "^5.0.2",
     "ioredis": "^5.0.4",
     "joi": "^17.6.0",
+    "libphonenumber-js": "^1.10.4",
     "nestjs-throttler-storage-redis": "^0.1.18",
     "nodejs-snowflake": "^2.0.1",
     "pg": "^8.7.3",

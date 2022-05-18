@@ -13,13 +13,10 @@ export class NoteSubscriber implements EntitySubscriberInterface<Note> {
     return Note;
   }
 
-  async beforeInsert({
-    manager,
-    entity: note,
-  }: InsertEvent<Note>): Promise<void> {
+  async beforeInsert({ manager, entity }: InsertEvent<Note>): Promise<void> {
     const person = await manager
       .getRepository(Person)
-      .findOne({ id: note.person.id });
+      .findOne({ id: entity.person.id });
 
     if (null == person) {
       throw new NotFoundException(Person.name + ' not found');
@@ -32,9 +29,9 @@ export class NoteSubscriber implements EntitySubscriberInterface<Note> {
     });
 
     if (null == noteWithLargestPosition) {
-      note.position = 0;
+      entity.position = 0;
     } else {
-      note.position = noteWithLargestPosition.position + 1;
+      entity.position = noteWithLargestPosition.position + 1;
     }
   }
 }

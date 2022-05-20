@@ -11,6 +11,7 @@ import { PhysicalAppearanceModule } from './module/physical-appearance/physical-
 import { IdentityModule } from './module/identity/identity.module';
 import { AddressModule } from './module/address/address.module';
 import { NoteModule } from './module/note/note.module';
+import { ContactModule } from './module/contact/contact.module';
 
 // TODO: Add birthDate column to Identity after starting Angular Project
 // TODO: Specify the lengths of text based fields
@@ -18,6 +19,7 @@ import { NoteModule } from './module/note/note.module';
 // TODO: Refactor @ResolveField decorated methods to return list-*.find();
 // TODO: Refactor `query` field from String into Enum<T>
 // TODO: Add proper missing authorization & authentication to entity's resolver methods
+// TODO: Introduce setting optional object property with spread operator to list-*.ts classes ---> ...(condition && { key: "value" }),
 
 @Module({
   imports: [
@@ -33,6 +35,7 @@ import { NoteModule } from './module/note/note.module';
     IdentityModule,
     AddressModule,
     NoteModule,
+    ContactModule,
   ],
 })
 export class AppModule {}

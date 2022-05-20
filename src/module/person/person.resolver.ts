@@ -23,6 +23,7 @@ import { PhysicalAppearance } from '../physical-appearance/model/physical-appear
 import { Identity } from '../identity/model/identity';
 import { Address } from '../address/model/address';
 import { Note } from '../note/model/note';
+import { Contact } from '../contact/model/contact';
 
 @Resolver(() => Person)
 export class PersonResolver {
@@ -110,5 +111,10 @@ export class PersonResolver {
   @ResolveField(() => [Note])
   async notes(@Parent() person: Person): Promise<Note[]> {
     return Note.find({ where: { person }, loadRelationIds: true });
+  }
+
+  @ResolveField(() => [Contact])
+  async contacts(@Parent() person: Person): Promise<Contact[]> {
+    return Contact.find({ where: { person }, loadRelationIds: true });
   }
 }

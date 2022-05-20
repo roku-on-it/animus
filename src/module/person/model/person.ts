@@ -14,6 +14,7 @@ import { PhysicalAppearance } from '../../physical-appearance/model/physical-app
 import { Identity } from '../../identity/model/identity';
 import { Address } from '../../address/model/address';
 import { Note } from '../../note/model/note';
+import { Contact } from '../../contact/model/contact';
 
 @ObjectType()
 @Entity()
@@ -44,4 +45,7 @@ export class Person extends Substructure {
 
   @OneToMany(() => Note, (n) => n.person, { nullable: true })
   notes: Note[];
+
+  @OneToMany(() => Contact, (c) => c.person, { nullable: true })
+  contacts: Contact[];
 }

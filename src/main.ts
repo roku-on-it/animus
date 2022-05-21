@@ -3,18 +3,19 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as session from 'express-session';
-import * as redis from 'redis';
+import Redis from 'ioredis';
 import * as connectRedis from 'connect-redis';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.use(helmet.hidePoweredBy());
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.enableCors();
 
   const configService: ConfigService = app.get(ConfigService);
-
   const RedisStore = connectRedis(session);
-  const redisClient = redis.createClient({
+  const redisClient = new Redis({
     host: configService.get('STORE_HOST'),
     port: configService.get('STORE_PORT'),
     db: configService.get('STORE_SESSION_DB'),

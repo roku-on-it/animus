@@ -1,67 +1,69 @@
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Context, Mutation, Parent, Query, Resolver } from '@nestjs/graphql';
 import { User } from 'src/module/user/model/user';
 import { CurrentUser } from 'src/module/shared/decorator/param/current-user';
 import { UpdateUser } from 'src/module/user/input/update-user';
 import { ListUser } from 'src/module/user/input/list-user';
 import { DeleteUser } from 'src/module/user/input/delete-user';
-import { ForbiddenException, UnauthorizedException } from '@nestjs/common';
-import { UpdateUserPassword } from 'src/module/user/input/update-user-password';
+import { ForbiddenException } from '@nestjs/common';
+import { UpdateMyPassword } from 'src/module/user/input/update-my-password';
 import { plainToClassFromExist } from 'class-transformer';
 import { AuthService } from 'src/module/auth/service/auth.service';
 import { hash } from 'bcrypt';
 import { Payload } from 'src/module/shared/decorator/param/payload';
 import { Id } from 'src/module/shared/decorator/param/id';
 import { UpdateMe } from 'src/module/user/input/update-me';
-import { RateLimit } from 'src/module/auth/decorator/rate-limit';
+import { RateLimit } from 'src/module/misc/app-throttle/decorator/rate-limit';
 import { GQLContext } from 'src/module/shared/interface/gql-context';
 import { UserList } from 'src/module/user/model/user-list';
+import { Authorize } from '../auth/decorator/authorize';
+import { UserRole } from './model/enum/user-role';
+import { DeleteMe } from './input/delete-me';
+import { PersonList } from '../person/model/person-list';
+import { ListPerson } from '../person/input/list-person';
+import { ProtectedResolveField } from '../shared/decorator/method/protected-resolve-field';
 
 @Resolver(() => User)
 export class UserResolver {
   constructor(private readonly authService: AuthService) {}
 
+  @Authorize(UserRole.User)
   @Query(() => User)
-  // @Authorize(UserRole.Mod)
-  async user(@Id() id: bigint): Promise<User> {
+  async user(@Id() id: number): Promise<User> {
     return User.findOneOrFail({ id });
   }
 
+  @Authorize(UserRole.User)
   @Query(() => UserList)
-  // @Authorize(UserRole.Mod)
-  async users(
-    @Args('filter', { nullable: true }) filter: ListUser,
-  ): Promise<UserList> {
+  async users(@Payload('filter', true) filter: ListUser): Promise<UserList> {
     return filter.find();
   }
 
-  @Mutation(() => User)
-  // @Authorize(UserRole.Admin)
+  @Authorize(UserRole.Root)
   @RateLimit(10, 20)
+  @Mutation(() => User)
   async updateUser(
     @CurrentUser() currentUser: User,
     @Payload() payload: UpdateUser,
   ): Promise<User> {
     const user = await User.findOneOrFail(payload.id);
 
-    if (currentUser.role <= user.role) {
-      throw new ForbiddenException('Insufficient permission');
-    }
-
-    if (currentUser.role <= payload.role) {
+    if (currentUser.role <= user.role || currentUser.role <= payload.role) {
       throw new ForbiddenException('Insufficient permission');
     }
 
     return User.findOneAndUpdate(payload);
   }
 
-  @Mutation(() => User)
-  // @Authorize(UserRole.Admin)
+  @Authorize(UserRole.Root)
   @RateLimit(2, 10)
+  @Mutation(() => User)
   async deleteUser(
     @CurrentUser() currentUser: User,
     @Payload() payload: DeleteUser,
   ): Promise<User> {
-    const user = await User.findOneOrFail(payload.id);
+    const user = await User.findOneOrFail(payload.id, {
+      relations: ['persons', 'trueBlue'],
+    });
 
     if (currentUser.role <= user.role) {
       throw new ForbiddenException('Insufficient permission');
@@ -70,20 +72,17 @@ export class UserResolver {
     return user.softRemove();
   }
 
-  // User's query & mutations
-
+  // Current user's query & mutations
   @Query(() => User)
-  // @Authorize()
   async me(@CurrentUser() currentUser: User): Promise<User> {
     return currentUser;
   }
 
-  @Mutation(() => User)
-  // @Authorize()
   @RateLimit(2, 10)
+  @Mutation(() => User)
   async updateMyPassword(
     @CurrentUser() currentUser: User,
-    @Payload() payload: UpdateUserPassword,
+    @Payload() payload: UpdateMyPassword,
   ): Promise<User> {
     const passMatch = await this.authService.comparePasswords(
       payload.password,
@@ -91,33 +90,52 @@ export class UserResolver {
     );
 
     if (!passMatch) {
-      throw new UnauthorizedException();
+      throw new ForbiddenException();
     }
 
     const newPassword = await hash(payload.newPassword, 12);
-    await plainToClassFromExist(currentUser, {
+
+    return plainToClassFromExist(currentUser, {
       password: newPassword,
     }).save();
-    return currentUser;
   }
 
   @Mutation(() => User)
-  // @Authorize()
   async deleteMe(
     @CurrentUser() currentUser: User,
     @Context() context: GQLContext,
+    @Payload() payload: DeleteMe,
   ): Promise<User> {
+    const passMatch = await this.authService.comparePasswords(
+      payload.password,
+      currentUser.password,
+    );
+
+    if (!passMatch) {
+      throw new ForbiddenException('Wrong password');
+    }
+
     await this.authService.logoutAndDestroySession(context);
     return currentUser.softRemove();
   }
 
+  // @RateLimit(3, 60)
   @Mutation(() => User)
-  // @Authorize()
-  @RateLimit(3, 60)
   async updateMe(
     @CurrentUser() currentUser: User,
     @Payload() payload: UpdateMe,
   ): Promise<User> {
     return plainToClassFromExist(currentUser, payload).save();
+  }
+
+  @ProtectedResolveField(() => PersonList)
+  async persons(
+    @Parent() createdBy: User,
+    @Payload('filter', true) filter: ListPerson,
+  ): Promise<PersonList> {
+    return filter.find({
+      where: { createdBy },
+      loadRelationIds: true,
+    });
   }
 }

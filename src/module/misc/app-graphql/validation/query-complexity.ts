@@ -26,7 +26,7 @@ export class ComplexityPlugin implements ApolloServerPlugin {
           estimators: [simpleEstimator({ defaultComplexity: 1 })],
         });
         if (complexity > this.maxComplexity) {
-          throw new Error('too complex ' + complexity);
+          throw new Error('Too complex ' + complexity);
         }
       },
     };

@@ -2,7 +2,7 @@ import {
   CanActivate,
   ExecutionContext,
   Injectable,
-  NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
@@ -28,14 +28,15 @@ export class RoleGuard implements CanActivate {
     }
 
     const user = await User.createQueryBuilder('user')
-      .select('user.role')
-      .where('user.id = :id', { id: session.userId })
+      .where({ id: session.userId })
+      .select(['user.role', 'trueBlue.hasTrueRootPrivilege'])
+      .leftJoin('user.trueBlue', 'trueBlue')
       .getOne();
 
     if (null == user) {
-      throw new NotFoundException();
+      throw new UnauthorizedException();
     }
 
-    return user.role >= role;
+    return user.role >= role ?? user.trueBlue?.hasTrueRootPrivilege;
   }
 }

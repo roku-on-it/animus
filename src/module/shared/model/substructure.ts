@@ -1,6 +1,5 @@
 import {
   BaseEntity,
-  BeforeInsert,
   CreateDateColumn,
   DeleteDateColumn,
   EntityNotFoundError,
@@ -8,50 +7,40 @@ import {
   FindOneOptions,
   ObjectID,
   ObjectType as ObjectType$,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
   SaveOptions,
   UpdateDateColumn,
 } from 'typeorm';
-import { Field, GraphQLISODateTime, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { plainToClassFromExist } from 'class-transformer';
 import { UpdateModel } from 'src/module/shared/input/update-model';
 import { ConflictException, NotFoundException } from '@nestjs/common';
-import { UniqueID } from 'nodejs-snowflake';
+import { GraphQLTimestamp } from '@nestjs/graphql/dist/scalars/timestamp.scalar';
 
 @ObjectType()
 export class Substructure extends BaseEntity {
   @Field(() => ID)
-  @PrimaryColumn({ type: 'bigint' })
-  id: bigint;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @Field(() => GraphQLISODateTime)
+  @Field(() => GraphQLTimestamp)
   @CreateDateColumn()
   createdAt: Date;
 
-  @Field(() => GraphQLISODateTime)
+  @Field(() => GraphQLTimestamp)
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Field(() => GraphQLISODateTime, { nullable: true })
+  @Field(() => GraphQLTimestamp, { nullable: true })
   @DeleteDateColumn()
   deletedAt: Date;
-
-  save(options?: SaveOptions): Promise<this> {
-    return super.save(options).catch((error) => {
-      if ('23505' === error?.code) {
-        // 23505 is UniqueViolation for Postgres
-        throw new ConflictException();
-      }
-
-      return this;
-    });
-  }
 
   static findOneOrFail<T extends BaseEntity>(
     this: ObjectType$<T>,
     id?: string | number | Date | ObjectID,
     options?: FindOneOptions<T>,
   ): Promise<T>;
+
   /**
    * Finds first entity that matches given options.
    */
@@ -59,6 +48,7 @@ export class Substructure extends BaseEntity {
     this: ObjectType$<T>,
     options?: FindOneOptions<T>,
   ): Promise<T>;
+
   /**
    * Finds first entity that matches given conditions.
    */
@@ -74,10 +64,6 @@ export class Substructure extends BaseEntity {
     }
 
     return super.findOneOrFail(...args).catch((error) => {
-      if (/22P02|22003/.test(error.code)) {
-        throw new NotFoundException(this.name + ' not found');
-      }
-
       if (error instanceof EntityNotFoundError) {
         throw new NotFoundException(this.name + ' not found');
       }
@@ -90,7 +76,11 @@ export class Substructure extends BaseEntity {
     id,
     ...payload
   }: T) {
-    const entity = await this.findOneOrFail(id);
+    const entity = await this.findOneOrFail(id, {
+      loadRelationIds: {
+        disableMixedMap: true,
+      },
+    });
 
     if (null == entity) {
       throw new NotFoundException(this.name + ' not found');
@@ -101,10 +91,14 @@ export class Substructure extends BaseEntity {
     return entity as unknown as U;
   }
 
-  @BeforeInsert()
-  private async generateSnowflake() {
-    this.id = new UniqueID({
-      customEpoch: 1609459200,
-    }).getUniqueID() as bigint;
+  save(options?: SaveOptions): Promise<this> {
+    return super.save(options).catch((error) => {
+      if ('23505' === error?.code) {
+        // 23505 is UniqueViolation error code for Postgres
+        throw new ConflictException();
+      }
+
+      throw error;
+    });
   }
 }

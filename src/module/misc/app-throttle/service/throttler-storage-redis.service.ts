@@ -1,40 +1,35 @@
 import { Injectable } from '@nestjs/common';
-import * as Redis from 'ioredis';
+import Redis, { RedisOptions } from 'ioredis';
 import { ThrottlerStorage } from '@nestjs/throttler';
+import { ExtendedRedis } from '../interface/extended-redis';
 
 @Injectable()
-export class ThrottlerStorageRedisService
-  implements Omit<ThrottlerStorage, 'storage'>
-{
-  redis: Redis.Redis;
-  scanCount: number;
+export class ThrottlerStorageRedisService implements ThrottlerStorage {
+  redis: ExtendedRedis;
+  storage: Record<string, number[]>;
 
-  constructor(redis?: Redis.Redis, scanCount?: number);
-  constructor(options?: Redis.RedisOptions, scanCount?: number);
-  constructor(url?: string, scanCount?: number);
-  constructor(
-    redisOrOptions?: Redis.Redis | Redis.RedisOptions | string,
-    scanCount?: number,
-  ) {
-    this.scanCount = typeof scanCount === 'undefined' ? 1000 : scanCount;
+  constructor(options: RedisOptions) {
+    this.redis = new Redis(options);
 
-    if (redisOrOptions instanceof Redis) {
-      this.redis = redisOrOptions;
-    } else if (typeof redisOrOptions === 'string') {
-      this.redis = new Redis(redisOrOptions as string);
-    } else {
-      this.redis = new Redis(redisOrOptions);
-    }
+    this.redis.defineCommand('ttls', {
+      numberOfKeys: 1,
+      lua: `
+      local keys = redis.call('SCAN', 0, 'MATCH', KEYS[1],'COUNT', 100);
+      local result = {}
+      for i,k in ipairs(keys[2]) do 
+        local ttl = redis.call('ttl', k)
+        result[i] = ttl
+       end
+      return result
+      `,
+    });
   }
 
   async getRecord(key: string): Promise<number[]> {
-    const ttls = (
-      await this.redis.scan(0, 'MATCH', key + ':*', 'COUNT', this.scanCount)
-    ).pop();
-    return (ttls as string[]).map((k) => parseInt(k.split(':').pop())).sort();
+    return this.redis.ttls(key + ':*');
   }
 
   async addRecord(key: string, ttl: number): Promise<void> {
-    await this.redis.set(key + ':' + Date.now(), ttl, 'EX', ttl);
+    await this.redis.set(key + ':' + Date.now(), '', 'EX', ttl);
   }
 }

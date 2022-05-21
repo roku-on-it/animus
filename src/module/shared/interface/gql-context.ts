@@ -11,5 +11,5 @@ export interface Req extends Request {
 }
 
 export interface Session extends session.Session {
-  userId: bigint;
+  userId: number;
 }

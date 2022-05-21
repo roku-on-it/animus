@@ -4,9 +4,4 @@ import { Field, ID, InputType } from '@nestjs/graphql';
 export class RefInput {
   @Field(() => ID)
   id: bigint;
-
-  // noinspection JSUnusedLocalSymbols
-  private constructor() {
-    return;
-  }
 }

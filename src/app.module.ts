@@ -13,7 +13,6 @@ import { AddressModule } from './module/address/address.module';
 import { NoteModule } from './module/note/note.module';
 import { ContactModule } from './module/contact/contact.module';
 
-// TODO: Add birthDate column to Identity after starting Angular Project
 // TODO: Specify the lengths of text based fields
 // TODO: Refactor @*Length & co-related decorators after specifying text length
 // TODO: Refactor @ResolveField decorated methods to return list-*.find();

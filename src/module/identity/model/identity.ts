@@ -22,6 +22,10 @@ export class Identity extends Substructure {
   @Column({ nullable: true })
   placeOfBirth: string;
 
+  @Field({ nullable: true })
+  @Column({ type: 'date', nullable: true })
+  dateOfBirth: string;
+
   @OneToOne(() => Person, (p) => p.identity, { nullable: false })
   @JoinColumn()
   person: Person;

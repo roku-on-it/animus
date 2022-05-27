@@ -29,7 +29,7 @@ export class UpdateIdentity extends UpdateModel {
   @OptionalField()
   @Trim()
   @Length(10, 10, {
-    message: '$property must be equal to 10 characters',
+    message: '$property must be equal to $constraint1 characters',
   })
   @IsISO8601()
   dateOfBirth: string;

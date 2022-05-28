@@ -15,6 +15,7 @@ import { Identity } from '../../identity/model/identity';
 import { Address } from '../../address/model/address';
 import { Note } from '../../note/model/note';
 import { Contact } from '../../contact/model/contact';
+import { LastKnownPlace } from '../../last-known-place/model/last-known-place';
 
 @ObjectType()
 @Entity()
@@ -48,4 +49,7 @@ export class Person extends Substructure {
 
   @OneToMany(() => Contact, (c) => c.person, { nullable: true })
   contacts: Contact[];
+
+  @OneToMany(() => LastKnownPlace, (c) => c.person, { nullable: true })
+  lastKnownPlaces: LastKnownPlace[];
 }

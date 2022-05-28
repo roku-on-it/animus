@@ -1,7 +1,7 @@
 import { GraphQLError, GraphQLScalarType } from 'graphql';
 import { isPositive, isString } from 'class-validator';
 
-export const UnixTimestampScalar: GraphQLScalarType = new GraphQLScalarType({
+export const GraphQLUnixTimestamp: GraphQLScalarType = new GraphQLScalarType({
   name: 'UnixTimestamp',
   description: 'Timestamp in milliseconds',
   // value from the client

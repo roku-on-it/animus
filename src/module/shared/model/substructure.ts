@@ -16,6 +16,7 @@ import { plainToClassFromExist } from 'class-transformer';
 import { UpdateModel } from 'src/module/shared/input/update-model';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { GraphQLTimestamp } from '@nestjs/graphql/dist/scalars/timestamp.scalar';
+import { snakeToPascal } from '../../helper/snake-to-pascal';
 
 @ObjectType()
 export class Substructure extends BaseEntity {
@@ -96,6 +97,14 @@ export class Substructure extends BaseEntity {
       if ('23505' === error?.code) {
         // 23505 is UniqueViolation error code for Postgres
         throw new ConflictException();
+      }
+
+      if ('23503' === error?.code) {
+        // 23503 is ForeignKeyViolation error code for Postgres
+        throw new NotFoundException(
+          snakeToPascal(error.detail.split(' ').at(-1).replace(/\W/g, '')) +
+            ' not found',
+        );
       }
 
       throw error;

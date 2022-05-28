@@ -6,5 +6,5 @@ import { Field, ID, InputType } from '@nestjs/graphql';
 @InputType()
 export abstract class UpdateModel {
   @Field(() => ID)
-  id: string;
+  id: number;
 }

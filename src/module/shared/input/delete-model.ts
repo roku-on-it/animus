@@ -6,5 +6,5 @@ import { Field, ID, InputType } from '@nestjs/graphql';
 @InputType()
 export abstract class DeleteModel {
   @Field(() => ID)
-  id: string;
+  id: number;
 }

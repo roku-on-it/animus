@@ -24,6 +24,7 @@ import { Identity } from '../identity/model/identity';
 import { Address } from '../address/model/address';
 import { Note } from '../note/model/note';
 import { Contact } from '../contact/model/contact';
+import { LastKnownPlace } from '../last-known-place/model/last-known-place';
 
 @Resolver(() => Person)
 export class PersonResolver {
@@ -116,5 +117,10 @@ export class PersonResolver {
   @ResolveField(() => [Contact])
   async contacts(@Parent() person: Person): Promise<Contact[]> {
     return Contact.find({ where: { person }, loadRelationIds: true });
+  }
+
+  @ResolveField(() => [LastKnownPlace])
+  async lastKnownPlaces(@Parent() person: Person): Promise<LastKnownPlace[]> {
+    return LastKnownPlace.find({ where: { person }, loadRelationIds: true });
   }
 }

@@ -16,7 +16,7 @@ import { LastKnownPlaceModule } from './module/last-known-place/last-known-place
 
 // TODO: Specify the lengths of text based fields.
 // TODO: Refactor @*Length & co-related decorators after specifying text length.
-// TODO: Refactor @ResolveField decorated methods to return filter-*.find();.
+// [Story] TODO: Refactor @ResolveField decorated methods to return filter-*.find();.
 // TODO: Add proper missing authorization & authentication to entity's resolver methods.
 // TODO: Introduce setting optional object property with spread operator to list-*.ts classes ---> ...(condition && { key: "value" }),.
 // TODO: Remove "person" "@Field()" from models as is it unnecessary.

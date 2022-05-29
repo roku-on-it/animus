@@ -4,12 +4,20 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { Person } from '../model/person';
-import { AddAcquaintance } from '../input/add-acquaintance';
-import { RemoveAcquaintance } from '../input/remove-acquaintance';
+import { UpdateAcquaintance } from '../input/action/acquaintance/update-acquaintance';
+import { PersonActions } from '../input/action/person-action';
 
 @Injectable()
 export class PersonService {
-  async addAcquaintance(payload: AddAcquaintance): Promise<Person> {
+  async handleActions(actions: PersonActions): Promise<void> {
+    for (const [action, payload] of Object.entries(actions)) {
+      if (payload instanceof UpdateAcquaintance) {
+        await this[action]({ person: actions.person, ...payload });
+      }
+    }
+  }
+
+  async addAcquaintance(payload: UpdateAcquaintance): Promise<Person> {
     const person = await Person.findOneOrFail(payload.person, {
       relations: ['acquaintances'],
     });
@@ -22,7 +30,13 @@ export class PersonService {
     );
 
     if (alreadyKnows) {
-      throw new ConflictException();
+      throw new ConflictException(
+        'Person(' +
+          payload.person.id +
+          ') is already acquainted with Person(' +
+          payload.acquaintance.id +
+          ')',
+      );
     }
 
     const acquaintance = await Person.findOneOrFail(payload.acquaintance);
@@ -30,7 +44,7 @@ export class PersonService {
     person.acquaintances.push(acquaintance);
 
     return person.save().catch((error) => {
-      if ('23514' === error.code) {
+      if ('cannot_know_self' === error.constraint) {
         throw new BadRequestException('Person cannot know themself');
       }
 
@@ -38,7 +52,7 @@ export class PersonService {
     });
   }
 
-  async removeAcquaintance(payload: RemoveAcquaintance): Promise<Person> {
+  async removeAcquaintance(payload: UpdateAcquaintance): Promise<Person> {
     const person = await Person.findOneOrFail(payload.person, {
       relations: ['acquaintances'],
     });

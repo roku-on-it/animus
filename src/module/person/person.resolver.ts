@@ -16,9 +16,7 @@ import { User } from '../user/model/user';
 import { PersonList } from './model/person-list';
 import { DeletePerson } from './input/delete-person';
 import { UpdatePerson } from './input/update-person';
-import { AddAcquaintance } from './input/add-acquaintance';
 import { PersonService } from './service/person.service';
-import { RemoveAcquaintance } from './input/remove-acquaintance';
 import { PhysicalAppearance } from '../physical-appearance/model/physical-appearance';
 import { Identity } from '../identity/model/identity';
 import { Address } from '../address/model/address';
@@ -52,6 +50,10 @@ export class PersonResolver {
 
   @Mutation(() => Person)
   async updatePerson(@Payload() payload: UpdatePerson): Promise<Person> {
+    await this.personService.handleActions({
+      person: { id: payload.id },
+      ...payload.actions,
+    });
     return Person.findOneAndUpdate(payload);
   }
 
@@ -59,18 +61,6 @@ export class PersonResolver {
   async deletePerson(@Payload() payload: DeletePerson): Promise<Person> {
     const person = await Person.findOneOrFail(payload.id);
     return person.softRemove();
-  }
-
-  @Mutation(() => Person)
-  async addAcquaintance(@Payload() payload: AddAcquaintance): Promise<Person> {
-    return this.personService.addAcquaintance(payload);
-  }
-
-  @Mutation(() => Person)
-  async removeAcquaintance(
-    @Payload() payload: RemoveAcquaintance,
-  ): Promise<Person> {
-    return this.personService.removeAcquaintance(payload);
   }
 
   @ResolveField(() => [Person])

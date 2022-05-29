@@ -12,6 +12,19 @@ export class PersonService {
   async handleActions(payload: UpdatePerson): Promise<void> {
     for (const action of payload.actions) {
       const [[method, actionBody]] = Object.entries(action);
+      /**
+       * It could be done as the example above.
+       * if('addAcquaintance' === method) {
+       *   this.addAcquaintance({
+       *     person: {
+       *       id: payload.id,
+       *     },
+       *     ...actionBody,
+       *   });
+       * }
+       *
+       * Might implement it later if things get too hard to handle that way.
+       */
       await this[method]({
         person: {
           id: payload.id,

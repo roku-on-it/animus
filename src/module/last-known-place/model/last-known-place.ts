@@ -1,5 +1,12 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+} from 'typeorm';
 import { Substructure } from '../../shared/model/substructure';
 import { Person } from '../../person/model/person';
 import { GraphQLTimestamp } from '@nestjs/graphql/dist/scalars/timestamp.scalar';
@@ -18,6 +25,10 @@ export class LastKnownPlace extends Substructure {
   @Field()
   @Column()
   metHere: boolean;
+
+  @ManyToMany(() => Person)
+  @JoinTable()
+  with: Person[];
 
   @ManyToOne(() => Person, (p) => p.lastKnownPlaces)
   @JoinColumn()

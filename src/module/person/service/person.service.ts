@@ -5,15 +5,19 @@ import {
 } from '@nestjs/common';
 import { Person } from '../model/person';
 import { UpdateAcquaintance } from '../input/action/acquaintance/update-acquaintance';
-import { PersonActions } from '../input/action/person-action';
+import { UpdatePerson } from '../input/update-person';
 
 @Injectable()
 export class PersonService {
-  async handleActions(actions: PersonActions): Promise<void> {
-    for (const [action, payload] of Object.entries(actions)) {
-      if (payload instanceof UpdateAcquaintance) {
-        await this[action]({ person: actions.person, ...payload });
-      }
+  async handleActions(payload: UpdatePerson): Promise<void> {
+    for (const action of payload.actions) {
+      const [[method, actionBody]] = Object.entries(action);
+      await this[method]({
+        person: {
+          id: payload.id,
+        },
+        ...actionBody,
+      });
     }
   }
 

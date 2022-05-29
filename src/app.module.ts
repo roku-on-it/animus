@@ -24,7 +24,7 @@ import { LastKnownPlaceModule } from './module/last-known-place/last-known-place
 // TODO: Check for fields in create models. Look into create-last-known-place.ts file for more details.
 // TODO: Check if there is unnecessary @ResolveField() decorators on both Person and its child entities. Look into last-known-place.resolver.ts for more details.
 // TODO: Check if there is any non-nullable field but nullable on update operations. Look into update-last-known-place.ts for more details.
-// TODO: Try to turn `addAcquaintance` and `removeAcquaintance` into Person's "actions: {}" or "actions: []" rather than standalone mutations. Do the same for LastKnownPlace
+// TODO: Try to turn `addAcquaintance` and `removeAcquaintance` into Person's "actions: []" rather than standalone mutations. Do the same for LastKnownPlace
 
 @Module({
   imports: [

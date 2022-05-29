@@ -2,9 +2,9 @@ import { UpdateModel } from '../../shared/input/update-model';
 import { InputType } from '@nestjs/graphql';
 import { OptionalField } from '../../shared/decorator/property/optional-field';
 import { Trim } from '../../shared/decorator/transform/trim';
-import { IsNotEmptyObject, Length } from 'class-validator';
-import { PersonActions } from './action/person-action';
-import { Type } from 'class-transformer';
+import { Length } from 'class-validator';
+import { PersonAction } from './action/person-action';
+import { IsActionArray } from '../../shared/decorator/validator/is-action-array';
 import { ACTIONS_DESCRIPTION } from '../../shared/constant/input-field-description';
 
 @InputType()
@@ -19,10 +19,9 @@ export class UpdatePerson extends UpdateModel {
   @Length(3, 1000)
   description: string;
 
-  @OptionalField(() => PersonActions, {
+  @OptionalField(() => [PersonAction], {
     description: ACTIONS_DESCRIPTION,
   })
-  @IsNotEmptyObject()
-  @Type(() => PersonActions)
-  actions: PersonActions;
+  @IsActionArray()
+  actions: PersonAction[];
 }

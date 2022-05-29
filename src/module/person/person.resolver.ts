@@ -50,10 +50,10 @@ export class PersonResolver {
 
   @Mutation(() => Person)
   async updatePerson(@Payload() payload: UpdatePerson): Promise<Person> {
-    await this.personService.handleActions({
-      person: { id: payload.id },
-      ...payload.actions,
-    });
+    if (null != payload.actions) {
+      await this.personService.handleActions(payload);
+    }
+
     return Person.findOneAndUpdate(payload);
   }
 

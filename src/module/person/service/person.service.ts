@@ -43,11 +43,11 @@ export class PersonService {
     payload.acquaintance.id = +payload.acquaintance.id;
     payload.person.id = +payload.person.id;
 
-    const alreadyKnows = person.acquaintances.some(
+    const isAlreadyAcquainted = person.acquaintances.some(
       (a) => a.id === payload.acquaintance.id,
     );
 
-    if (alreadyKnows) {
+    if (isAlreadyAcquainted) {
       throw new ConflictException(
         'Person(' +
           payload.person.id +

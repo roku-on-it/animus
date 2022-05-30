@@ -85,7 +85,7 @@ export class PersonService {
     }
 
     person.acquaintances = person.acquaintances.filter(
-      (a) => a.id !== +payload.acquaintance.id,
+      (acquaintance) => acquaintance.id !== +payload.acquaintance.id,
     );
 
     return person.save();

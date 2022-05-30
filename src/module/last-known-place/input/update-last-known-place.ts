@@ -4,6 +4,9 @@ import { OptionalField } from '../../shared/decorator/property/optional-field';
 import { GraphQLTimestamp } from '@nestjs/graphql/dist/scalars/timestamp.scalar';
 import { IsDate, MinLength } from 'class-validator';
 import { Transform } from 'class-transformer';
+import { ACTIONS_DESCRIPTION } from '../../shared/constant/input-field-description';
+import { IsActionArray } from '../../shared/decorator/validator/is-action-array';
+import { LastKnownPlaceAction } from './action/last-known-place-action';
 
 @InputType()
 export class UpdateLastKnownPlace extends UpdateModel {
@@ -28,4 +31,10 @@ export class UpdateLastKnownPlace extends UpdateModel {
     message: '$property must be a valid timestamp or number of milliseconds',
   })
   when: Date;
+
+  @OptionalField(() => [LastKnownPlaceAction], {
+    description: ACTIONS_DESCRIPTION,
+  })
+  @IsActionArray()
+  actions: LastKnownPlaceAction[];
 }

@@ -73,15 +73,15 @@ export class PersonService {
       relations: ['acquaintances'],
     });
 
-    const knowsAcquaintance = person.acquaintances.some(
-      (acquaintance) => acquaintance.id === +payload.acquaintance.id,
-    );
-
     const isSelf = payload.acquaintance.id === payload.person.id;
 
     if (isSelf) {
       throw new BadRequestException();
     }
+
+    const knowsAcquaintance = person.acquaintances.some(
+      (acquaintance) => acquaintance.id === +payload.acquaintance.id,
+    );
 
     if (!knowsAcquaintance) {
       throw new NotFoundException('Acquaintance to remove not found');

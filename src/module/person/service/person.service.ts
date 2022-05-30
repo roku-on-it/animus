@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { Person } from '../model/person';
 import { UpdatePerson } from '../input/update-person';
@@ -78,10 +79,12 @@ export class PersonService {
 
     const isSelf = payload.acquaintance.id === payload.person.id;
 
-    if (isSelf || !knowsAcquaintance) {
-      throw new BadRequestException(
-        !isSelf ? 'Acquaintance to remove not found' : '',
-      );
+    if (isSelf) {
+      throw new BadRequestException();
+    }
+
+    if (!knowsAcquaintance) {
+      throw new NotFoundException('Acquaintance to remove not found');
     }
 
     person.acquaintances = person.acquaintances.filter(

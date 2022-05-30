@@ -44,7 +44,7 @@ export class PersonService {
     payload.person.id = +payload.person.id;
 
     const isAlreadyAcquainted = person.acquaintances.some(
-      (a) => a.id === payload.acquaintance.id,
+      (acquaintance) => acquaintance.id === payload.acquaintance.id,
     );
 
     if (isAlreadyAcquainted) {
@@ -81,7 +81,7 @@ export class PersonService {
     payload.person.id = +payload.person.id;
 
     const knowsAcquaintance = person.acquaintances.some(
-      (a) => a.id === payload.acquaintance.id,
+      (acquaintance) => acquaintance.id === payload.acquaintance.id,
     );
 
     if (acquaintance.id == payload.person.id || !knowsAcquaintance) {

@@ -79,10 +79,6 @@ export class Substructure extends BaseEntity {
   }: T) {
     const entity = await this.findOneOrFail(id);
 
-    if (null == entity) {
-      throw new NotFoundException(this.name + ' not found');
-    }
-
     await plainToClassFromExist(entity, payload).save();
 
     return entity as unknown as U;

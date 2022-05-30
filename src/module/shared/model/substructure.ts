@@ -77,11 +77,7 @@ export class Substructure extends BaseEntity {
     id,
     ...payload
   }: T) {
-    const entity = await this.findOneOrFail(id, {
-      loadRelationIds: {
-        disableMixedMap: true,
-      },
-    });
+    const entity = await this.findOneOrFail(id);
 
     if (null == entity) {
       throw new NotFoundException(this.name + ' not found');

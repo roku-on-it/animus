@@ -27,6 +27,7 @@ import { LastKnownPlaceModule } from './module/last-known-place/last-known-place
 // TODO: Try to turn `addAcquaintance` and `removeAcquaintance` into Person's "actions: []" rather than standalone mutations. Do the same for LastKnownPlace
 // TODO: Add \n before every return statement in the codebase.
 // TODO: Test the whole application bottom up after completing the todos.
+//  --> Test each mutation and query
 
 @Module({
   imports: [

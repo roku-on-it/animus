@@ -40,11 +40,8 @@ export class PersonService {
       relations: ['acquaintances'],
     });
 
-    payload.acquaintance.id = +payload.acquaintance.id;
-    payload.person.id = +payload.person.id;
-
     const isAlreadyAcquainted = person.acquaintances.some(
-      (acquaintance) => acquaintance.id === payload.acquaintance.id,
+      (acquaintance) => acquaintance.id === +payload.acquaintance.id,
     );
 
     if (isAlreadyAcquainted) {
@@ -57,13 +54,13 @@ export class PersonService {
       );
     }
 
-    const acquaintance = await Person.findOneOrFail(payload.acquaintance);
-
-    person.acquaintances.push(acquaintance);
+    person.acquaintances.push(payload.acquaintance);
 
     return person.save().catch((error) => {
       if ('cannot_know_self' === error.constraint) {
-        throw new BadRequestException('Person cannot know themself');
+        throw new BadRequestException(
+          'Person cannot be acquainted with themself',
+        );
       }
 
       throw error;
@@ -75,21 +72,20 @@ export class PersonService {
       relations: ['acquaintances'],
     });
 
-    const acquaintance = await Person.findOneOrFail(payload.acquaintance);
-
-    payload.acquaintance.id = +payload.acquaintance.id;
-    payload.person.id = +payload.person.id;
-
     const knowsAcquaintance = person.acquaintances.some(
-      (acquaintance) => acquaintance.id === payload.acquaintance.id,
+      (acquaintance) => acquaintance.id === +payload.acquaintance.id,
     );
 
-    if (acquaintance.id == payload.person.id || !knowsAcquaintance) {
-      throw new BadRequestException();
+    const isSelf = payload.acquaintance.id === payload.person.id;
+
+    if (isSelf || !knowsAcquaintance) {
+      throw new BadRequestException(
+        !isSelf ? 'Acquaintance to remove not found' : '',
+      );
     }
 
     person.acquaintances = person.acquaintances.filter(
-      (a) => a.id !== payload.acquaintance.id,
+      (a) => a.id !== +payload.acquaintance.id,
     );
 
     return person.save();

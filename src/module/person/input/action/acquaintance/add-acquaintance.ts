@@ -3,7 +3,7 @@ import { RefInput } from '../../../../shared/input/ref-input';
 import { Person } from '../../../model/person';
 
 @InputType()
-export class UpdateAcquaintance {
+export class AddAcquaintance {
   person: Person;
 
   @Field(() => RefInput)

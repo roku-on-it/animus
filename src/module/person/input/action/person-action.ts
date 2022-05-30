@@ -1,11 +1,12 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { UpdateAcquaintance } from './acquaintance/update-acquaintance';
+import { AddAcquaintance } from './acquaintance/add-acquaintance';
+import { RemoveAcquaintance } from './acquaintance/remove-acquaintance';
 
 @InputType()
 export class PersonAction {
-  @Field(() => UpdateAcquaintance, { nullable: true })
-  addAcquaintance: UpdateAcquaintance;
+  @Field(() => AddAcquaintance, { nullable: true })
+  addAcquaintance: AddAcquaintance;
 
-  @Field(() => UpdateAcquaintance, { nullable: true })
-  removeAcquaintance: UpdateAcquaintance;
+  @Field(() => RemoveAcquaintance, { nullable: true })
+  removeAcquaintance: RemoveAcquaintance;
 }

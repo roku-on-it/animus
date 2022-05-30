@@ -4,8 +4,9 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { Person } from '../model/person';
-import { UpdateAcquaintance } from '../input/action/acquaintance/update-acquaintance';
 import { UpdatePerson } from '../input/update-person';
+import { AddAcquaintance } from '../input/action/acquaintance/add-acquaintance';
+import { RemoveAcquaintance } from '../input/action/acquaintance/remove-acquaintance';
 
 @Injectable()
 export class PersonService {
@@ -34,7 +35,7 @@ export class PersonService {
     }
   }
 
-  async addAcquaintance(payload: UpdateAcquaintance): Promise<Person> {
+  async addAcquaintance(payload: AddAcquaintance): Promise<Person> {
     const person = await Person.findOneOrFail(payload.person, {
       relations: ['acquaintances'],
     });
@@ -69,7 +70,7 @@ export class PersonService {
     });
   }
 
-  async removeAcquaintance(payload: UpdateAcquaintance): Promise<Person> {
+  async removeAcquaintance(payload: RemoveAcquaintance): Promise<Person> {
     const person = await Person.findOneOrFail(payload.person, {
       relations: ['acquaintances'],
     });

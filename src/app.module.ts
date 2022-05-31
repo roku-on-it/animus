@@ -22,6 +22,7 @@ import { SocialProfileModule } from './module/social-profile/social-profile.modu
 // TODO: Add proper missing authorization & authentication to entity's resolver methods.
 // TODO: Introduce setting optional object property with spread operator to list-*.ts classes ---> ...(condition && { key: "value" }),.
 //  --> Replace field "query" with entity's searchable text fields on List*.ts listing classes
+//   --> Specify the @Length according to the specified length on Database design.
 // TODO: Remove "person" "@Field()" from models as is it unnecessary.
 // TODO: Add "with" relation to LastKnownPlace.
 // TODO: Check for fields in create models. Look into create-last-known-place.ts file for more details.

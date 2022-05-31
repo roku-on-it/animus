@@ -13,12 +13,15 @@ import { AddressModule } from './module/address/address.module';
 import { NoteModule } from './module/note/note.module';
 import { ContactModule } from './module/contact/contact.module';
 import { LastKnownPlaceModule } from './module/last-known-place/last-known-place.module';
+import { SocialProfileModule } from './module/social-profile/social-profile.module';
 
 // TODO: Specify the lengths of text based fields.
 // TODO: Refactor @*Length & co-related decorators after specifying text length.
+// TODO: Use "@Trim()" on every text based field.
 // [Story] TODO: Refactor @ResolveField decorated methods to return filter-*.find();.
 // TODO: Add proper missing authorization & authentication to entity's resolver methods.
 // TODO: Introduce setting optional object property with spread operator to list-*.ts classes ---> ...(condition && { key: "value" }),.
+//  --> Replace field "query" with entity's searchable text fields on List*.ts listing classes
 // TODO: Remove "person" "@Field()" from models as is it unnecessary.
 // TODO: Add "with" relation to LastKnownPlace.
 // TODO: Check for fields in create models. Look into create-last-known-place.ts file for more details.
@@ -45,6 +48,7 @@ import { LastKnownPlaceModule } from './module/last-known-place/last-known-place
     NoteModule,
     ContactModule,
     LastKnownPlaceModule,
+    SocialProfileModule,
   ],
 })
 export class AppModule {}

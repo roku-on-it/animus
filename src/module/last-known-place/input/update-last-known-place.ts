@@ -15,7 +15,8 @@ export class UpdateLastKnownPlace extends UpdateModel {
   where: string;
 
   // More details: We are checking if the value is null and transform any falsy or truthy value to boolean type
-  // since using both OptionalField and IsBoolean allows client to send `null` and
+  // since using both OptionalField and IsBoolean allows client to send `null` and cause error on the database
+  // because "metHere" property is non-nullable.
   @OptionalField()
   @Transform(({ value }) => {
     if ('boolean' === typeof value) {

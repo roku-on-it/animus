@@ -5,7 +5,7 @@ import {
 } from 'class-validator';
 
 export function ObjectMaxPropertySize(
-  maxSize: number,
+  max: number,
   validationOptions?: ValidationOptions,
 ) {
   return function (object: Record<string, any>, propertyName: string) {
@@ -13,12 +13,12 @@ export function ObjectMaxPropertySize(
       propertyName,
       name: 'objectMaxPropertySize',
       target: object.constructor,
-      constraints: [maxSize],
+      constraints: [max],
       options: validationOptions,
       validator: {
         defaultMessage() {
           const eachPrefix = validationOptions.each ? 'each value in ' : '';
-          const pluralSuffix = maxSize >= 1 ? 'y' : 'ies';
+          const pluralSuffix = max >= 1 ? 'y' : 'ies';
 
           return (
             eachPrefix +

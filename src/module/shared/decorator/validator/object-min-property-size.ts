@@ -5,7 +5,7 @@ import {
 } from 'class-validator';
 
 export function ObjectMinPropertySize(
-  minSize: number,
+  min: number,
   validationOptions?: ValidationOptions,
 ) {
   return function (object: Record<string, any>, propertyName: string) {
@@ -13,12 +13,12 @@ export function ObjectMinPropertySize(
       propertyName,
       name: 'objectMinPropertySize',
       target: object.constructor,
-      constraints: [minSize],
+      constraints: [min],
       options: validationOptions,
       validator: {
         defaultMessage() {
           const eachPrefix = validationOptions.each ? 'each value in ' : '';
-          const pluralSuffix = minSize <= 1 ? 'y' : 'ies';
+          const pluralSuffix = min <= 1 ? 'y' : 'ies';
 
           return (
             eachPrefix +

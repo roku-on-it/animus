@@ -57,11 +57,11 @@ export class TrueBlueResolver {
     @CurrentUser() currentUser: User,
     @Payload() payload: DeleteTrueBlue,
   ): Promise<TrueBlue> {
-    const userTrueBlue = await TrueBlue.withAuth.findOneOrFail({
+    const currentUserTrueBlue = await TrueBlue.withAuth.findOneOrFail({
       where: { user: { id: currentUser.id } },
     });
 
-    if (!userTrueBlue.hasTrueRootPrivilege) {
+    if (!currentUserTrueBlue.hasTrueRootPrivilege) {
       throw new ForbiddenException('Insufficient permission');
     }
 

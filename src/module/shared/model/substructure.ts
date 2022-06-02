@@ -23,6 +23,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { GraphQLTimestamp } from '@nestjs/graphql/dist/scalars/timestamp.scalar';
+import { snakeToPascal } from '../../helper/snake-to-pascal';
 
 @ObjectType()
 export class Substructure extends BaseEntity {
@@ -100,7 +101,10 @@ export class Substructure extends BaseEntity {
         case '23505':
           throw new ConflictException();
         case '23503':
-          throw new NotFoundException(this.constructor.name + ' not found');
+          throw new NotFoundException(
+            snakeToPascal(error.detail.split(' ').at(-1).replace(/\W/g, '')) +
+              ' not found',
+          );
         case '23502':
           Logger.debug(error, this.constructor.name);
 

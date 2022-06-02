@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   EntityNotFoundError,
+  TypeORMError,
   FindConditions,
   FindOneOptions,
   ObjectID,
@@ -105,9 +106,13 @@ export class Substructure extends BaseEntity {
 
           throw new BadRequestException(error.column + ' should not be null');
         default:
-          Logger.error(error, error.constructor.name);
+          if (error instanceof TypeORMError) {
+            Logger.verbose(JSON.stringify(error), error.constructor.name);
 
-          throw new InternalServerErrorException(error);
+            throw new InternalServerErrorException(error);
+          }
+
+          throw error;
       }
     });
   }

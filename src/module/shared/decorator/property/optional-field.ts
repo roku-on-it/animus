@@ -1,11 +1,8 @@
 import { applyDecorators } from '@nestjs/common';
-import { Field, FieldOptions } from '@nestjs/graphql';
+import { Field } from '@nestjs/graphql';
 import { ReturnTypeFunc } from '@nestjs/graphql/dist/interfaces/return-type-func.interface';
 import { IsOptional, ValidateIf } from 'class-validator';
-
-interface OptionalFieldOptions extends FieldOptions {
-  explicitNullCheck?: boolean;
-}
+import { OptionalFieldOptions } from './interface/optional-field-options';
 
 export function OptionalField(
   options?: OptionalFieldOptions,
@@ -15,25 +12,25 @@ export function OptionalField(
 ): PropertyDecorator;
 export function OptionalField(
   returnTypeFunction?: ReturnTypeFunc,
-): PropertyDecorator;
-export function OptionalField(
-  returnTypeFunction?: ReturnTypeFunc,
   options?: OptionalFieldOptions,
 ): PropertyDecorator;
-export function OptionalField(
-  returnTypeFunction?: ReturnTypeFunc | OptionalFieldOptions,
+export function OptionalField<
+  T extends ReturnTypeFunc,
+  U extends OptionalFieldOptions,
+>(
+  returnTypeFunction?: T & U,
   options?: OptionalFieldOptions,
 ): PropertyDecorator {
-  if (returnTypeFunction?.['explicitNullCheck']) {
+  if (returnTypeFunction?.explicitNullCheck || options?.explicitNullCheck) {
     if ('function' === typeof returnTypeFunction) {
       return applyDecorators(
-        Field(returnTypeFunction, { nullable: true, ...returnTypeFunction }),
+        Field(returnTypeFunction, { nullable: true, ...options }),
         ValidateIf((target, value) => 'undefined' !== typeof value),
       );
     }
 
     return applyDecorators(
-      Field({ nullable: true, ...returnTypeFunction }),
+      Field({ nullable: true, ...(returnTypeFunction as U) }),
       ValidateIf((target, value) => 'undefined' !== typeof value),
     );
   }
@@ -45,5 +42,8 @@ export function OptionalField(
     );
   }
 
-  return applyDecorators(Field({ nullable: true, ...options }), IsOptional());
+  return applyDecorators(
+    Field({ nullable: true, ...(returnTypeFunction as U) }),
+    IsOptional(),
+  );
 }

@@ -34,7 +34,7 @@ export class User extends Substructure {
   @OneToOne(() => TrueBlue, (tb) => tb.user, { nullable: false, cascade: true })
   trueBlue: TrueBlue;
 
-  @ProtectedField(UserRole.Root, () => PersonList, { nullable: true })
+  @ProtectedField(UserRole.Guest, () => PersonList, { nullable: true })
   @OneToMany(() => Person, (p) => p.createdBy, { nullable: true })
   persons: Person[];
 

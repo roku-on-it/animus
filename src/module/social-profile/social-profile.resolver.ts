@@ -14,9 +14,13 @@ import { Payload } from '../shared/decorator/param/payload';
 import { Person } from '../person/model/person';
 import { SocialProfileList } from './model/social-profile-list';
 import { ListSocialProfile } from './input/list-social-profile';
+import { Authorize } from '../auth/decorator/authorize';
+import { UserRole } from '../user/model/enum/user-role';
+import { RateLimit } from '../misc/app-throttle/decorator/rate-limit';
 
 @Resolver(() => SocialProfile)
 export class SocialProfileResolver {
+  @Authorize(UserRole.Guest)
   @Query(() => SocialProfileList)
   async socialProfiles(
     @Payload('filter', true) filter: ListSocialProfile,
@@ -24,6 +28,8 @@ export class SocialProfileResolver {
     return filter.find();
   }
 
+  @Authorize(UserRole.User)
+  @RateLimit(2, 10)
   @Mutation(() => SocialProfile)
   async createSocialProfile(
     @Payload() payload: CreateSocialProfile,
@@ -31,6 +37,8 @@ export class SocialProfileResolver {
     return plainToInstance(SocialProfile, payload).save();
   }
 
+  @Authorize(UserRole.User)
+  @RateLimit(2, 10)
   @Mutation(() => SocialProfile)
   async updateSocialProfile(
     @Payload() payload: UpdateSocialProfile,
@@ -38,6 +46,8 @@ export class SocialProfileResolver {
     return SocialProfile.findOneAndUpdate(payload);
   }
 
+  @Authorize(UserRole.Root)
+  @RateLimit(1, 30)
   @Mutation(() => SocialProfile)
   async deleteSocialProfile(
     @Payload() payload: DeleteSocialProfile,

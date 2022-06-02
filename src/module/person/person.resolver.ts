@@ -24,16 +24,21 @@ import { Note } from '../note/model/note';
 import { Contact } from '../contact/model/contact';
 import { LastKnownPlace } from '../last-known-place/model/last-known-place';
 import { SocialProfile } from '../social-profile/model/social-profile';
+import { Authorize } from '../auth/decorator/authorize';
+import { UserRole } from '../user/model/enum/user-role';
+import { RateLimit } from '../misc/app-throttle/decorator/rate-limit';
 
 @Resolver(() => Person)
 export class PersonResolver {
   constructor(private personService: PersonService) {}
 
+  @Authorize(UserRole.Guest)
   @Query(() => Person)
   async person(@Id() id): Promise<Person> {
     return Person.findOneOrFail({ id }, { loadRelationIds: true });
   }
 
+  @Authorize(UserRole.Guest)
   @Query(() => PersonList)
   async persons(
     @Payload('filter', true) filter: ListPerson,
@@ -41,6 +46,8 @@ export class PersonResolver {
     return filter.find();
   }
 
+  @Authorize(UserRole.User)
+  @RateLimit(2, 60)
   @Mutation(() => Person)
   async createPerson(
     @CurrentUser() createdBy: User,
@@ -49,6 +56,8 @@ export class PersonResolver {
     return plainToInstance(Person, { createdBy, ...payload }).save();
   }
 
+  @Authorize(UserRole.Root)
+  @RateLimit(2, 10)
   @Mutation(() => Person)
   async updatePerson(@Payload() payload: UpdatePerson): Promise<Person> {
     if (null != payload.actions) {
@@ -58,6 +67,8 @@ export class PersonResolver {
     return Person.findOneAndUpdate(payload);
   }
 
+  @Authorize(UserRole.Root)
+  @RateLimit(1, 60)
   @Mutation(() => Person)
   async deletePerson(@Payload() payload: DeletePerson): Promise<Person> {
     const person = await Person.findOneOrFail(payload.id);
@@ -65,6 +76,7 @@ export class PersonResolver {
     return person.softRemove();
   }
 
+  @Authorize(UserRole.Guest)
   @ResolveField(() => [Person])
   async acquaintances(@Parent() { id }: Person): Promise<Person[]> {
     const person = await Person.findOneOrFail(

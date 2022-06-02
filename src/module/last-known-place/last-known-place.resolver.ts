@@ -8,15 +8,16 @@ import { DeleteLastKnownPlace } from './input/delete-last-known-place';
 import { Person } from '../person/model/person';
 import { LastKnownPlaceService } from './service/last-known-place.service';
 import { In } from 'typeorm';
+import { Authorize } from '../auth/decorator/authorize';
+import { UserRole } from '../user/model/enum/user-role';
+import { RateLimit } from '../misc/app-throttle/decorator/rate-limit';
 
 @Resolver(() => LastKnownPlace)
 export class LastKnownPlaceResolver {
   constructor(private lastKnownPlaceService: LastKnownPlaceService) {}
 
-  // More details: We don't have any queries in LastKnownPlace Resolver
-  // as it is not necessary because LastKnownPlace is only about the Person entity,
-  // and we shouldn't query this field alone because of this.
-
+  @Authorize(UserRole.User)
+  @RateLimit(2, 10)
   @Mutation(() => LastKnownPlace)
   async createLastKnownPlace(
     @Payload() payload: CreateLastKnownPlace,
@@ -24,6 +25,8 @@ export class LastKnownPlaceResolver {
     return plainToInstance(LastKnownPlace, payload).save();
   }
 
+  @Authorize(UserRole.User)
+  @RateLimit(2, 10)
   @Mutation(() => LastKnownPlace)
   async updateLastKnownPlace(
     @Payload() payload: UpdateLastKnownPlace,
@@ -35,6 +38,8 @@ export class LastKnownPlaceResolver {
     return LastKnownPlace.findOneAndUpdate(payload);
   }
 
+  @Authorize(UserRole.Root)
+  @RateLimit(1, 30)
   @Mutation(() => LastKnownPlace)
   async deleteLastKnownPlace(
     @Payload() payload: DeleteLastKnownPlace,

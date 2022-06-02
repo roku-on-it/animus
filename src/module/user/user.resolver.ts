@@ -26,20 +26,20 @@ import { ProtectedResolveField } from '../shared/decorator/method/protected-reso
 export class UserResolver {
   constructor(private readonly authService: AuthService) {}
 
-  @Authorize(UserRole.User)
+  @Authorize(UserRole.Guest)
   @Query(() => User)
   async user(@Id() id: number): Promise<User> {
     return User.findOneOrFail({ id });
   }
 
-  @Authorize(UserRole.User)
+  @Authorize(UserRole.Guest)
   @Query(() => UserList)
   async users(@Payload('filter', true) filter: ListUser): Promise<UserList> {
     return filter.find();
   }
 
   @Authorize(UserRole.Root)
-  @RateLimit(10, 20)
+  @RateLimit(2, 20)
   @Mutation(() => User)
   async updateUser(
     @CurrentUser() currentUser: User,
@@ -55,7 +55,7 @@ export class UserResolver {
   }
 
   @Authorize(UserRole.Root)
-  @RateLimit(2, 10)
+  @RateLimit(1, 60 * 60)
   @Mutation(() => User)
   async deleteUser(
     @CurrentUser() currentUser: User,
@@ -78,7 +78,7 @@ export class UserResolver {
     return currentUser;
   }
 
-  @RateLimit(2, 10)
+  @RateLimit(1, 60 * 60)
   @Mutation(() => User)
   async updateMyPassword(
     @CurrentUser() currentUser: User,
@@ -120,7 +120,7 @@ export class UserResolver {
     return currentUser.softRemove();
   }
 
-  // @RateLimit(3, 60)
+  @RateLimit(1, 60 * 30)
   @Mutation(() => User)
   async updateMe(
     @CurrentUser() currentUser: User,

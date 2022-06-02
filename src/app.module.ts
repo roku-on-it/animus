@@ -15,8 +15,6 @@ import { ContactModule } from './module/contact/contact.module';
 import { LastKnownPlaceModule } from './module/last-known-place/last-known-place.module';
 import { SocialProfileModule } from './module/social-profile/social-profile.module';
 
-// TODO: Add proper missing authorization & authentication to entity's resolver methods.
-
 // TODO: Notify the client about operations upon fail.
 //  --> Trying to remove Persons with ids [1,2,3,4], managed to remove 1,2 and 4 successfully but operation failed on 3.
 //  --> Notify the client about successful or failed operation in response body >>

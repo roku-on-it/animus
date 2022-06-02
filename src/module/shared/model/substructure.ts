@@ -14,9 +14,14 @@ import {
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { plainToClassFromExist } from 'class-transformer';
 import { UpdateModel } from 'src/module/shared/input/update-model';
-import { ConflictException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { GraphQLTimestamp } from '@nestjs/graphql/dist/scalars/timestamp.scalar';
-import { snakeToPascal } from '../../helper/snake-to-pascal';
 
 @ObjectType()
 export class Substructure extends BaseEntity {
@@ -90,20 +95,20 @@ export class Substructure extends BaseEntity {
 
   save(options?: SaveOptions): Promise<this> {
     return super.save(options).catch((error) => {
-      if ('23505' === error?.code) {
-        // 23505 is UniqueViolation error code for Postgres
-        throw new ConflictException();
-      }
+      switch (error.code) {
+        case '23505':
+          throw new ConflictException();
+        case '23503':
+          throw new NotFoundException(this.constructor.name + ' not found');
+        case '23502':
+          Logger.debug(error, this.constructor.name);
 
-      if ('23503' === error?.code) {
-        // 23503 is ForeignKeyViolation error code for Postgres
-        throw new NotFoundException(
-          snakeToPascal(error.detail.split(' ').at(-1).replace(/\W/g, '')) +
-            ' not found',
-        );
-      }
+          throw new BadRequestException(error.column + ' should not be null');
+        default:
+          Logger.error(error, error.constructor.name);
 
-      throw error;
+          throw new InternalServerErrorException(error);
+      }
     });
   }
 }

@@ -17,8 +17,8 @@ import { SocialProfileModule } from './module/social-profile/social-profile.modu
 
 // TODO: Add proper missing authorization & authentication to entity's resolver methods.
 
+// TODO: Add additional @IsBoolean(), @IsEnum(), @IsInt() and other validations to create/update fields.
 // TODO: There may be string | number fields that is required when creating but it is optional on updating, but we want to prevent client to send "null" explicitly. Check for those fields in codebase
-// TODO: Check for fields in create models. Look into create-last-known-place.ts file for more details.
 // TODO: Check if there is any non-nullable field but nullable on update operations. Look into update-last-known-place.ts for more details.
 //  --> Test each mutation and query
 // TODO: Add

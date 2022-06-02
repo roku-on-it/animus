@@ -7,9 +7,6 @@ import { GraphQLTimestamp } from '@nestjs/graphql/dist/scalars/timestamp.scalar'
 
 @InputType()
 export class CreateLastKnownPlace {
-  // More details: If both "where" and "when" fields are null, throw an error
-  // indicating that at least one of them must be defined in order to
-  // create a LastKnownPlace entity. Check other create-*.ts entities too.
   @Field()
   @Length(3, 150)
   where: string;

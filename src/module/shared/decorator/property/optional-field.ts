@@ -1,7 +1,10 @@
 import { applyDecorators } from '@nestjs/common';
-import { Field, ReturnTypeFunc } from '@nestjs/graphql';
+import { Field, FieldOptions, ReturnTypeFunc } from '@nestjs/graphql';
 import { IsOptional, ValidateIf } from 'class-validator';
-import { OptionalFieldOptions } from './interface/optional-field-options';
+
+export interface OptionalFieldOptions extends Omit<FieldOptions, 'nullable'> {
+  explicitNullCheck?: boolean;
+}
 
 export function OptionalField(
   options?: OptionalFieldOptions,
@@ -20,29 +23,20 @@ export function OptionalField<
   returnTypeFunction?: T & U,
   options?: OptionalFieldOptions,
 ): PropertyDecorator {
-  if (returnTypeFunction?.explicitNullCheck || options?.explicitNullCheck) {
-    if ('function' === typeof returnTypeFunction) {
-      return applyDecorators(
-        Field(returnTypeFunction, { nullable: true, ...options }),
-        ValidateIf((target, value) => 'undefined' !== typeof value),
-      );
-    }
-
-    return applyDecorators(
-      Field({ nullable: true, ...(returnTypeFunction as U) }),
-      ValidateIf((target, value) => 'undefined' !== typeof value),
-    );
-  }
+  const IsNotNull =
+    returnTypeFunction?.explicitNullCheck || options?.explicitNullCheck
+      ? ValidateIf((target, value) => undefined !== value)
+      : IsOptional();
 
   if ('function' === typeof returnTypeFunction) {
     return applyDecorators(
       Field(returnTypeFunction, { nullable: true, ...options }),
-      IsOptional(),
+      IsNotNull,
     );
   }
 
   return applyDecorators(
     Field({ nullable: true, ...(returnTypeFunction as U) }),
-    IsOptional(),
+    IsNotNull,
   );
 }

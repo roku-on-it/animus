@@ -20,6 +20,7 @@ export class RegisterProducerService {
       .then((user: User) => {
         user.createdAt = new Date(user.createdAt);
         user.updatedAt = new Date(user.createdAt);
+
         return user;
       })
       .catch((error) => {

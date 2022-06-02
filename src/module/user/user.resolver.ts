@@ -116,6 +116,7 @@ export class UserResolver {
     }
 
     await this.authService.logoutAndDestroySession(context);
+
     return currentUser.softRemove();
   }
 

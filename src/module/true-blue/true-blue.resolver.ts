@@ -48,6 +48,7 @@ export class TrueBlueResolver {
     }
 
     const user = await User.findOneOrFail(payload.user.id);
+
     return plainToInstance(TrueBlue, { user }).save();
   }
 

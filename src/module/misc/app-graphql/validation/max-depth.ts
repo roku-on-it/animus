@@ -16,6 +16,7 @@ export const maxDepth = (maxDepth: number) => {
         validationContext,
       );
     });
+
     return validationContext;
   };
 };
@@ -25,6 +26,7 @@ const getFragments = (definitions) => {
     if (definition.kind === Kind.FRAGMENT_DEFINITION) {
       map[definition.name.value] = definition;
     }
+
     return map;
   }, {});
 };
@@ -34,6 +36,7 @@ const getQueriesAndMutations = (definitions) => {
     if (definition.kind === Kind.OPERATION_DEFINITION) {
       map[definition.name ? definition.name.value : ''] = definition;
     }
+
     return map;
   }, {});
 };
@@ -60,6 +63,7 @@ const determineDepth = (
       if (shouldIgnore || !node.selectionSet) {
         return 0;
       }
+
       return (
         1 +
         Math.max(

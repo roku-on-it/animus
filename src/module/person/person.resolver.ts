@@ -61,6 +61,7 @@ export class PersonResolver {
   @Mutation(() => Person)
   async deletePerson(@Payload() payload: DeletePerson): Promise<Person> {
     const person = await Person.findOneOrFail(payload.id);
+
     return person.softRemove();
   }
 

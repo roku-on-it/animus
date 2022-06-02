@@ -19,7 +19,6 @@ export class Address extends Substructure {
   @Column({ type: 'enum', enum: AddressType })
   type: AddressType;
 
-  @Field(() => Person)
   @ManyToOne(() => Person, (p) => p.addresses)
   @JoinColumn()
   person: Person;

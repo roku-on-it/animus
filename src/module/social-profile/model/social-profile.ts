@@ -10,8 +10,8 @@ export class SocialProfile extends Substructure {
   @Column()
   referenceLink: string;
 
-  @Field()
-  @Column()
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   additionalInfo: string;
 
   @Field()

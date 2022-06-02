@@ -23,7 +23,7 @@ export class UpdateIdentity extends UpdateModel {
 
   @OptionalField()
   @Trim()
-  @Length(3)
+  @Length(3, 150)
   placeOfBirth: string;
 
   @OptionalField()

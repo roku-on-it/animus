@@ -9,12 +9,12 @@ import { ACTIONS_DESCRIPTION } from '../../shared/constant/input-field-descripti
 
 @InputType()
 export class UpdatePerson extends UpdateModel {
-  @OptionalField()
+  @OptionalField({ explicitNullCheck: true })
   @Trim()
   @Length(3, 255)
   displayName: string;
 
-  @OptionalField()
+  @OptionalField({ explicitNullCheck: true })
   @Trim()
   @Length(3, 1000)
   description: string;

@@ -8,12 +8,12 @@ import { OptionalField } from '../../shared/decorator/property/optional-field';
 
 @InputType()
 export class UpdateUser extends UpdateModel {
-  @OptionalField()
+  @OptionalField({ explicitNullCheck: true })
   @IsUsername()
   @Trim()
   username: string;
 
-  @OptionalField(() => UserRole)
+  @OptionalField(() => UserRole, { explicitNullCheck: true })
   @IsEnum(UserRole)
   role: UserRole;
 }

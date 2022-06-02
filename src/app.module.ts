@@ -17,27 +17,16 @@ import { SocialProfileModule } from './module/social-profile/social-profile.modu
 
 // TODO: Add proper missing authorization & authentication to entity's resolver methods.
 
-// TODO: Add additional @IsBoolean(), @IsEnum(), @IsInt() and other validations to create/update fields.
-// TODO: There may be string | number fields that is required when creating but it is optional on updating, but we want to prevent client to send "null" explicitly. Check for those fields in codebase
-// TODO: Check if there is any non-nullable field but nullable on update operations. Look into update-last-known-place.ts for more details.
-//  --> Test each mutation and query
-// TODO: Add
-//  @ValidateIf((target: ListContact) => {
-//     return null === target.verified;
-//   })
-//   @IsBoolean()
-//   to boolean upsert fields.
-// TODO: Add
-//    @Field(() => AddressType, { nullable: true })
-//   @IsEnum(AddressType)
-//
-//    to enum upsert fields.
+// TODO: Notify the client about operations upon fail.
+//  --> Trying to remove Persons with ids [1,2,3,4], managed to remove 1,2 and 4 successfully but operation failed on 3.
+//  --> Notify the client about successful or failed operation in response body >>
+//  {
+//   failedOperations: [{ removeWith: { with: { id: 3 } } }]
+//  }
 
 // TODO: Introduce setting optional object property with spread operator to list-*.ts classes ---> ...(condition && { key: "value" }),.
 //  --> Replace field "query" with entity's searchable text fields on List*.ts listing classes
 // TODO: Set @Length() limit to query fields (like content property in contact class, not the word or property "query") in list-*.ts classes.
-
-// TODO: Test the whole application bottom up after completing the todos.
 
 @Module({
   imports: [

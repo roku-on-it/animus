@@ -1,6 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
-import { Field } from '@nestjs/graphql';
-import { ReturnTypeFunc } from '@nestjs/graphql/dist/interfaces/return-type-func.interface';
+import { Field, ReturnTypeFunc } from '@nestjs/graphql';
 import { IsOptional, ValidateIf } from 'class-validator';
 import { OptionalFieldOptions } from './interface/optional-field-options';
 

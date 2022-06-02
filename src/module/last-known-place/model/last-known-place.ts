@@ -14,8 +14,8 @@ import { GraphQLTimestamp } from '@nestjs/graphql/dist/scalars/timestamp.scalar'
 @ObjectType()
 @Entity()
 export class LastKnownPlace extends Substructure {
-  @Field({ nullable: true })
-  @Column({ nullable: true })
+  @Field()
+  @Column()
   where: string;
 
   @Field(() => GraphQLTimestamp, { nullable: true })

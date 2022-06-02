@@ -1,6 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { Person } from '../../person/model/person';
-import { IsDate, MinLength } from 'class-validator';
+import { IsDate, Length } from 'class-validator';
 import { RefInput } from '../../shared/input/ref-input';
 import { OptionalField } from '../../shared/decorator/property/optional-field';
 import { GraphQLTimestamp } from '@nestjs/graphql/dist/scalars/timestamp.scalar';
@@ -10,8 +10,8 @@ export class CreateLastKnownPlace {
   // More details: If both "where" and "when" fields are null, throw an error
   // indicating that at least one of them must be defined in order to
   // create a LastKnownPlace entity. Check other create-*.ts entities too.
-  @OptionalField()
-  @MinLength(3)
+  @Field()
+  @Length(3, 150)
   where: string;
 
   @OptionalField(() => GraphQLTimestamp)

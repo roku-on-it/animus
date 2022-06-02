@@ -1,17 +1,19 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { RefInput } from '../../shared/input/ref-input';
 import { Person } from '../../person/model/person';
-import { Length } from 'class-validator';
+import { IsUrl, Length } from 'class-validator';
 import { OptionalField } from '../../shared/decorator/property/optional-field';
+import { Trim } from '../../shared/decorator/transform/trim';
 
 @InputType()
 export class CreateSocialProfile {
   @Field()
-  @Length(3, 3)
+  @Trim()
+  @IsUrl()
   referenceLink: string;
 
   @OptionalField()
-  @Length(3, 3)
+  @Length(3, 1000)
   additionalInfo: string;
 
   @Field()

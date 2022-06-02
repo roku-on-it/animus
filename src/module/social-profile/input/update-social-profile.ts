@@ -1,5 +1,5 @@
 import { InputType } from '@nestjs/graphql';
-import { Length } from 'class-validator';
+import { IsUrl, Length } from 'class-validator';
 import { OptionalField } from '../../shared/decorator/property/optional-field';
 import { Transform } from 'class-transformer';
 import { Trim } from '../../shared/decorator/transform/trim';
@@ -9,12 +9,12 @@ import { UpdateModel } from '../../shared/input/update-model';
 export class UpdateSocialProfile extends UpdateModel {
   @OptionalField()
   @Trim()
-  @Length(3, 3)
+  @IsUrl()
   referenceLink: string;
 
   @OptionalField()
   @Trim()
-  @Length(3, 3)
+  @Length(3, 1000)
   additionalInfo: string;
 
   @OptionalField()

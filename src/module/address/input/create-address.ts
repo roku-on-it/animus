@@ -9,16 +9,15 @@ import { Length } from 'class-validator';
 export class CreateAddress {
   @Field()
   @Trim()
-  @Length(3, 255)
+  @Length(3, 300)
   description: string;
 
   @Field()
   @Trim()
-  @Length(3, 255)
+  @Length(3, 150)
   content: string;
 
   @Field(() => AddressType)
-  @Trim()
   type: AddressType;
 
   @Field(() => RefInput)

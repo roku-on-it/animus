@@ -1,7 +1,7 @@
 import { UpdateModel } from '../../shared/input/update-model';
-import { InputType } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
 import { Trim } from '../../shared/decorator/transform/trim';
-import { Length } from 'class-validator';
+import { IsEnum, Length } from 'class-validator';
 import { AddressType } from '../model/enum/address-type';
 import { OptionalField } from '../../shared/decorator/property/optional-field';
 
@@ -9,15 +9,15 @@ import { OptionalField } from '../../shared/decorator/property/optional-field';
 export class UpdateAddress extends UpdateModel {
   @OptionalField()
   @Trim()
-  @Length(3, 255)
+  @Length(3, 300)
   description: string;
 
   @OptionalField()
   @Trim()
-  @Length(3, 255)
+  @Length(3, 150)
   content: string;
 
-  @OptionalField(() => AddressType)
-  @Trim()
+  @Field(() => AddressType, { nullable: true })
+  @IsEnum(AddressType)
   type: AddressType;
 }

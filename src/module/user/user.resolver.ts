@@ -26,13 +26,13 @@ import { ProtectedResolveField } from '../shared/decorator/method/protected-reso
 export class UserResolver {
   constructor(private readonly authService: AuthService) {}
 
-  @Authorize(UserRole.Guest)
+  @Authorize(UserRole.User)
   @Query(() => User)
   async user(@Id() id: number): Promise<User> {
     return User.findOneOrFail({ id });
   }
 
-  @Authorize(UserRole.Guest)
+  @Authorize(UserRole.User)
   @Query(() => UserList)
   async users(@Payload('filter', true) filter: ListUser): Promise<UserList> {
     return filter.find();

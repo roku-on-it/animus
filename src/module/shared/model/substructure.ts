@@ -23,7 +23,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { GraphQLTimestamp } from '@nestjs/graphql/dist/scalars/timestamp.scalar';
-import { snakeToPascal } from '../../helper/snake-to-pascal';
+import { snakeToPascal } from '../helper/snake-to-pascal';
 
 @ObjectType()
 export class Substructure extends BaseEntity {

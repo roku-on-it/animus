@@ -1,4 +1,10 @@
-import { Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { Note } from './model/note';
 import { Payload } from '../shared/decorator/param/payload';
 import { plainToInstance } from 'class-transformer';
@@ -10,6 +16,7 @@ import { ListNote } from './input/list-note';
 import { Authorize } from '../auth/decorator/authorize';
 import { UserRole } from '../user/model/enum/user-role';
 import { RateLimit } from '../misc/app-throttle/decorator/rate-limit';
+import { Person } from '../person/model/person';
 
 @Resolver(() => Note)
 export class NoteResolver {
@@ -39,5 +46,10 @@ export class NoteResolver {
   async deleteNote(@Payload() payload: DeleteNote): Promise<Note> {
     const note = await Note.findOneOrFail(payload.id);
     return note.softRemove();
+  }
+
+  @ResolveField(() => Person)
+  async person(@Parent() note: Note): Promise<Person> {
+    return Person.findOneOrFail(note.person);
   }
 }

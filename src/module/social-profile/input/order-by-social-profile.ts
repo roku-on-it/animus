@@ -1,12 +1,18 @@
-import { Field, InputType } from '@nestjs/graphql';
-import { Direction } from 'src/module/shared/enum/direction';
-import { OrderBySocialProfileField } from './enum/order-by-contact-field';
+import { Field, InputType, registerEnumType } from '@nestjs/graphql';
+import { OrderBy } from '../../shared/input/list/order-by';
+
+export enum OrderBySocialProfileField {
+  id = 'id',
+  createdAt = 'createdAt',
+  updatedAt = 'updatedAt',
+}
+
+registerEnumType(OrderBySocialProfileField, {
+  name: 'OrderBySocialProfileField',
+});
 
 @InputType()
-export class OrderBySocialProfile {
+export class OrderBySocialProfile extends OrderBy {
   @Field(() => OrderBySocialProfileField)
   field: OrderBySocialProfileField;
-
-  @Field(() => Direction)
-  direction: Direction;
 }

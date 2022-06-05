@@ -129,6 +129,7 @@ export class UserResolver {
     return plainToClassFromExist(currentUser, payload).save();
   }
 
+  // Leaving here for further reference
   @ProtectedResolveField(() => PersonList)
   async persons(
     @Parent() createdBy: User,

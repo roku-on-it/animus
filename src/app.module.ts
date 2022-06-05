@@ -22,8 +22,6 @@ import { SocialProfileModule } from './module/social-profile/social-profile.modu
 //   failedOperations: [{ removeWith: { with: { id: 3 } } }]
 //  }
 
-// TODO: Add list inputs to separate folder
-
 // TODO: Add identity and physicalAppearance search fields to person
 
 @Module({

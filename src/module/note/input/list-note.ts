@@ -1,29 +1,43 @@
 import { NoteList } from '../model/note-list';
 import { ListType } from '../../shared/input/list-type';
 import { FindManyOptions, ILike } from 'typeorm';
-import { MinLength, ValidateIf } from 'class-validator';
-import { Field, InputType } from '@nestjs/graphql';
+import { IsNotEmptyObject, Length } from 'class-validator';
+import { InputType } from '@nestjs/graphql';
 import { Note } from '../model/note';
 import { OrderByNote } from './order-by-note';
+import { OptionalField } from '../../shared/decorator/property/optional-field';
+import { ORDER_BY_DEFAULT } from '../../shared/constant/order-by-default-value';
+import { Person } from '../../person/model/person';
+import { RefInput } from '../../shared/input/ref-input';
 
 @InputType()
 export class ListNote extends ListType {
-  @Field(() => String, { nullable: true })
-  @MinLength(3)
-  @ValidateIf((target: ListNote) => target.query.length > 0)
-  query = '';
+  @OptionalField({ explicitNullCheck: true })
+  @Length(3, 255)
+  content: string;
 
-  @Field({ nullable: true })
+  @OptionalField(() => RefInput, { explicitNullCheck: true })
+  @IsNotEmptyObject()
+  person: Person;
+
+  @OptionalField({
+    explicitNullCheck: true,
+    defaultValue: ORDER_BY_DEFAULT,
+  })
+  @IsNotEmptyObject()
   orderBy: OrderByNote;
 
   async find(options?: FindManyOptions): Promise<NoteList> {
     const [items, total] = await Note.findAndCount({
       order: {
-        [this.orderBy?.field ?? 'createdAt']: this.orderBy?.direction ?? 'ASC',
+        [this.orderBy.field]: this.orderBy.direction,
       },
       skip: this.pageIndex * this.pageSize,
-      take: this.pageSize ?? 5,
-      where: [{ content: ILike('%' + this.query + '%') }],
+      take: this.pageSize,
+      where: {
+        ...(this.content && { content: ILike('%' + this.content + '%') }),
+        ...(this.person && { person: this.person }),
+      },
       loadRelationIds: true,
       ...options,
     });

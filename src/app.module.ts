@@ -22,9 +22,9 @@ import { SocialProfileModule } from './module/social-profile/social-profile.modu
 //   failedOperations: [{ removeWith: { with: { id: 3 } } }]
 //  }
 
-// TODO: Introduce setting optional object property with spread operator to list-*.ts classes ---> ...(condition && { key: "value" }),.
-//  --> Replace field "query" with entity's searchable text fields on List*.ts listing classes
-// TODO: Set @Length() limit to query fields (like content property in contact class, not the word or property "query") in list-*.ts classes.
+// TODO: Add list inputs to separate folder
+
+// TODO: Add identity and physicalAppearance search fields to person
 
 @Module({
   imports: [

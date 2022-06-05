@@ -1,10 +1,10 @@
 import { registerEnumType } from '@nestjs/graphql';
 
 export enum OrderByPersonField {
-  Id = 'id',
-  CreatedAt = 'createdAt',
-  UpdatedAt = 'updatedAt',
-  DisplayName = 'displayName',
+  id = 'id',
+  createdAt = 'createdAt',
+  updatedAt = 'updatedAt',
+  displayName = 'displayName',
 }
 
 registerEnumType(OrderByPersonField, {

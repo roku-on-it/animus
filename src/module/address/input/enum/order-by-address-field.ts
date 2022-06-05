@@ -1,9 +1,9 @@
 import { registerEnumType } from '@nestjs/graphql';
 
 export enum OrderByAddressField {
-  Id = 'id',
-  CreatedAt = 'createdAt',
-  UpdatedAt = 'updatedAt',
+  id = 'id',
+  createdAt = 'createdAt',
+  updatedAt = 'updatedAt',
 }
 
 registerEnumType(OrderByAddressField, {

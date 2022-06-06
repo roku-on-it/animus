@@ -1,5 +1,5 @@
 import { InputType } from '@nestjs/graphql';
-import { Between, FindManyOptions, ILike, LessThan, MoreThan } from 'typeorm';
+import { FindManyOptions, ILike } from 'typeorm';
 import { ListType } from '../../../shared/input/list-type';
 import { PersonList } from '../../model/person-list';
 import { Person } from '../../model/person';
@@ -96,20 +96,8 @@ export class ListPerson extends ListType {
       ...(this.identity.placeOfBirth && {
         placeOfBirth: ILike('%' + this.identity.placeOfBirth + '%'),
       }),
-      ...(this.identity.dateOfBirth && this.parseDateOfBirth()),
+      ...(this.identity.dateOfBirth &&
+        this.identity.dateOfBirth.getFilterObject('dateOfBirth')),
     };
-  }
-
-  private parseDateOfBirth() {
-    return this.identity.dateOfBirth.after && this.identity.dateOfBirth.before
-      ? {
-          dateOfBirth: Between(
-            this.identity.dateOfBirth.after,
-            this.identity.dateOfBirth.before,
-          ),
-        }
-      : this.identity.dateOfBirth.before
-      ? { dateOfBirth: LessThan(this.identity.dateOfBirth.before) }
-      : { dateOfBirth: MoreThan(this.identity.dateOfBirth.after) };
   }
 }

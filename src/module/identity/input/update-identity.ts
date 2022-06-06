@@ -1,8 +1,9 @@
 import { InputType } from '@nestjs/graphql';
 import { UpdateModel } from '../../shared/input/update-model';
 import { Trim } from '../../shared/decorator/transform/trim';
-import { IsISO8601, Length } from 'class-validator';
+import { Length } from 'class-validator';
 import { OptionalField } from '../../shared/decorator/property/optional-field';
+import { IsDateField } from '../../shared/decorator/validator/is-date-field';
 
 @InputType()
 export class UpdateIdentity extends UpdateModel {
@@ -27,10 +28,6 @@ export class UpdateIdentity extends UpdateModel {
   placeOfBirth: string;
 
   @OptionalField()
-  @Trim()
-  @Length(10, 10, {
-    message: '$property must be equal to $constraint1 characters',
-  })
-  @IsISO8601()
+  @IsDateField()
   dateOfBirth: string;
 }

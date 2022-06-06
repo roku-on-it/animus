@@ -9,6 +9,7 @@ import { OptionalField } from '../../../shared/decorator/property/optional-field
 import { ORDER_BY_DEFAULT } from '../../../shared/constant/order-by-default-value';
 import { FilterPersonByIdentity } from './filter-person-by-identity';
 import { Type } from 'class-transformer';
+import { FilterPersonByPhysicalAppearance } from './filter-person-by-physical-appearance';
 
 @InputType()
 export class ListPerson extends ListType {
@@ -21,6 +22,12 @@ export class ListPerson extends ListType {
   @OptionalField({ explicitNullCheck: true })
   @Length(3, 1000)
   description: string;
+
+  @OptionalField({ explicitNullCheck: true })
+  @Type(() => FilterPersonByPhysicalAppearance)
+  @ValidateNested()
+  @IsNotEmptyObject()
+  physicalAppearance: FilterPersonByPhysicalAppearance;
 
   @OptionalField({ explicitNullCheck: true })
   @Type(() => FilterPersonByIdentity)
@@ -61,6 +68,15 @@ export class ListPerson extends ListType {
     return {
       items,
       total,
+    };
+  }
+
+  private parsePhysicalAppearance() {
+    this.relations.push('physicalAppearance');
+    return {
+      ...(this.physicalAppearance.height && {
+        height: this.physicalAppearance.height,
+      }),
     };
   }
 

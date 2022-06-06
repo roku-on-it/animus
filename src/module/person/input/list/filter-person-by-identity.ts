@@ -1,9 +1,9 @@
 import { InputType, OmitType } from '@nestjs/graphql';
 import { UpdateIdentity } from '../../../identity/input/update-identity';
-import { DateOfBirthFilter } from './date-of-birth-filter';
 import { OptionalField } from '../../../shared/decorator/property/optional-field';
 import { IsNotEmptyObject, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
+import { DateFilter } from '../../../shared/input/list/date-filter';
 
 @InputType()
 export class FilterPersonByIdentity extends OmitType(UpdateIdentity, [
@@ -11,8 +11,8 @@ export class FilterPersonByIdentity extends OmitType(UpdateIdentity, [
   'dateOfBirth',
 ]) {
   @OptionalField({ explicitNullCheck: true })
-  @Type(() => DateOfBirthFilter)
+  @Type(() => DateFilter)
   @ValidateNested()
   @IsNotEmptyObject()
-  dateOfBirth: DateOfBirthFilter;
+  dateOfBirth: DateFilter;
 }

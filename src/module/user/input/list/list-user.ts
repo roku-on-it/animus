@@ -2,12 +2,12 @@ import { InputType } from '@nestjs/graphql';
 import { FindManyOptions, ILike } from 'typeorm';
 import { User } from 'src/module/user/model/user';
 import { UserList } from 'src/module/user/model/user-list';
-import { ListType } from '../../shared/input/list-type';
+import { ListType } from '../../../shared/input/list-type';
 import { IsEnum, IsNotEmptyObject, Length } from 'class-validator';
 import { OrderByUser } from './order-by-user';
-import { OptionalField } from '../../shared/decorator/property/optional-field';
-import { ORDER_BY_DEFAULT } from '../../shared/constant/order-by-default-value';
-import { UserRole } from '../model/enum/user-role';
+import { OptionalField } from '../../../shared/decorator/property/optional-field';
+import { ORDER_BY_DEFAULT } from '../../../shared/constant/order-by-default-value';
+import { UserRole } from '../../model/enum/user-role';
 
 @InputType()
 export class ListUser extends ListType {

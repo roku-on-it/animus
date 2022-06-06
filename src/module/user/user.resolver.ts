@@ -2,7 +2,7 @@ import { Context, Mutation, Parent, Query, Resolver } from '@nestjs/graphql';
 import { User } from 'src/module/user/model/user';
 import { CurrentUser } from 'src/module/shared/decorator/param/current-user';
 import { UpdateUser } from 'src/module/user/input/update-user';
-import { ListUser } from 'src/module/user/input/list-user';
+import { ListUser } from 'src/module/user/input/list/list-user';
 import { DeleteUser } from 'src/module/user/input/delete-user';
 import { ForbiddenException } from '@nestjs/common';
 import { UpdateMyPassword } from 'src/module/user/input/update-my-password';
@@ -19,7 +19,7 @@ import { Authorize } from '../auth/decorator/authorize';
 import { UserRole } from './model/enum/user-role';
 import { DeleteMe } from './input/delete-me';
 import { PersonList } from '../person/model/person-list';
-import { ListPerson } from '../person/input/list-person';
+import { ListPerson } from '../person/input/list/list-person';
 import { ProtectedResolveField } from '../shared/decorator/method/protected-resolve-field';
 
 @Resolver(() => User)

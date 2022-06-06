@@ -1,14 +1,14 @@
-import { SocialProfile } from '../model/social-profile';
+import { SocialProfile } from '../../model/social-profile';
 import { OrderBySocialProfile } from './order-by-social-profile';
-import { OptionalField } from '../../shared/decorator/property/optional-field';
-import { SocialProfileList } from '../model/social-profile-list';
-import { ListType } from '../../shared/input/list-type';
+import { OptionalField } from '../../../shared/decorator/property/optional-field';
+import { SocialProfileList } from '../../model/social-profile-list';
+import { ListType } from '../../../shared/input/list-type';
 import { FindManyOptions, ILike } from 'typeorm';
 import { IsBoolean, IsNotEmptyObject, Length } from 'class-validator';
 import { InputType } from '@nestjs/graphql';
-import { ORDER_BY_DEFAULT } from '../../shared/constant/order-by-default-value';
-import { RefInput } from '../../shared/input/ref-input';
-import { Person } from '../../person/model/person';
+import { ORDER_BY_DEFAULT } from '../../../shared/constant/order-by-default-value';
+import { RefInput } from '../../../shared/input/ref-input';
+import { Person } from '../../../person/model/person';
 
 @InputType()
 export class ListSocialProfile extends ListType {

@@ -12,7 +12,7 @@ import { CreateNote } from './input/create-note';
 import { UpdateNote } from './input/update-note';
 import { DeleteNote } from './input/delete-note';
 import { NoteList } from './model/note-list';
-import { ListNote } from './input/list-note';
+import { ListNote } from './input/list/list-note';
 import { Authorize } from '../auth/decorator/authorize';
 import { UserRole } from '../user/model/enum/user-role';
 import { RateLimit } from '../misc/app-throttle/decorator/rate-limit';

@@ -12,7 +12,7 @@ import { CreateAddress } from './input/create-address';
 import { UpdateAddress } from './input/update-address';
 import { DeleteAddress } from './input/delete-address';
 import { AddressList } from './model/address-list';
-import { ListAddress } from './input/list-address';
+import { ListAddress } from './input/list/list-address';
 import { Person } from '../person/model/person';
 import { Authorize } from '../auth/decorator/authorize';
 import { UserRole } from '../user/model/enum/user-role';

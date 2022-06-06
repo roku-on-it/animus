@@ -1,13 +1,13 @@
 import { InputType } from '@nestjs/graphql';
 import { FindManyOptions, ILike } from 'typeorm';
-import { ListType } from '../../shared/input/list-type';
-import { AddressList } from '../model/address-list';
-import { Address } from '../model/address';
+import { ListType } from '../../../shared/input/list-type';
+import { AddressList } from '../../model/address-list';
+import { Address } from '../../model/address';
 import { OrderByAddress } from './order-by-address';
-import { OptionalField } from '../../shared/decorator/property/optional-field';
-import { AddressType } from '../model/enum/address-type';
+import { OptionalField } from '../../../shared/decorator/property/optional-field';
+import { AddressType } from '../../model/enum/address-type';
 import { IsEnum, IsNotEmptyObject, Length } from 'class-validator';
-import { ORDER_BY_DEFAULT } from '../../shared/constant/order-by-default-value';
+import { ORDER_BY_DEFAULT } from '../../../shared/constant/order-by-default-value';
 
 @InputType()
 export class ListAddress extends ListType {

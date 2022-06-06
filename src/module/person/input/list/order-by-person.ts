@@ -1,5 +1,5 @@
 import { Field, InputType, registerEnumType } from '@nestjs/graphql';
-import { OrderBy } from '../../shared/input/list/order-by';
+import { OrderBy } from '../../../shared/input/list/order-by';
 
 export enum OrderByPersonField {
   id = 'id',

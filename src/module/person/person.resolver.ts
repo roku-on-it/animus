@@ -10,7 +10,7 @@ import { plainToInstance } from 'class-transformer';
 import { Payload } from '../shared/decorator/param/payload';
 import { CreatePerson } from './input/create-person';
 import { Id } from '../shared/decorator/param/id';
-import { ListPerson } from './input/list-person';
+import { ListPerson } from './input/list/list-person';
 import { CurrentUser } from '../shared/decorator/param/current-user';
 import { User } from '../user/model/user';
 import { PersonList } from './model/person-list';

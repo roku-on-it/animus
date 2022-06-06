@@ -13,7 +13,7 @@ import { SocialProfile } from './model/social-profile';
 import { Payload } from '../shared/decorator/param/payload';
 import { Person } from '../person/model/person';
 import { SocialProfileList } from './model/social-profile-list';
-import { ListSocialProfile } from './input/list-social-profile';
+import { ListSocialProfile } from './input/list/list-social-profile';
 import { Authorize } from '../auth/decorator/authorize';
 import { UserRole } from '../user/model/enum/user-role';
 import { RateLimit } from '../misc/app-throttle/decorator/rate-limit';

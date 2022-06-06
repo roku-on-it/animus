@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { OrderBy } from '../../shared/input/list/order-by';
+import { OrderBy } from '../../../shared/input/list/order-by';
 import { registerEnumType } from '@nestjs/graphql';
 
 export enum OrderByAddressField {

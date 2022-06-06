@@ -23,6 +23,7 @@ import { SocialProfileModule } from './module/social-profile/social-profile.modu
 //  }
 
 // TODO: Add identity and physicalAppearance search fields to person
+// TODO: Add identity and physicalAppearance when creating person (look for sending data: {} with save method to send data to TypeORM subscribers)
 
 @Module({
   imports: [

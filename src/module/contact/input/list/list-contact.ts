@@ -1,13 +1,13 @@
 import { InputType } from '@nestjs/graphql';
 import { FindManyOptions, ILike } from 'typeorm';
-import { ListType } from '../../shared/input/list-type';
+import { ListType } from '../../../shared/input/list-type';
 import { IsBoolean, IsEnum, IsNotEmptyObject, Length } from 'class-validator';
-import { ContactList } from '../model/contact-list';
-import { Contact } from '../model/contact';
+import { ContactList } from '../../model/contact-list';
+import { Contact } from '../../model/contact';
 import { OrderByContact } from './order-by-contact';
-import { ContactType } from '../model/enum/contact-type';
-import { OptionalField } from '../../shared/decorator/property/optional-field';
-import { ORDER_BY_DEFAULT } from '../../shared/constant/order-by-default-value';
+import { ContactType } from '../../model/enum/contact-type';
+import { OptionalField } from '../../../shared/decorator/property/optional-field';
+import { ORDER_BY_DEFAULT } from '../../../shared/constant/order-by-default-value';
 
 @InputType()
 export class ListContact extends ListType {

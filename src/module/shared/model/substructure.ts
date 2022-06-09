@@ -3,7 +3,6 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   EntityNotFoundError,
-  TypeORMError,
   FindConditions,
   FindOneOptions,
   ObjectID,
@@ -18,7 +17,6 @@ import { UpdateModel } from 'src/module/shared/input/update-model';
 import {
   BadRequestException,
   ConflictException,
-  InternalServerErrorException,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
@@ -110,12 +108,6 @@ export class Substructure extends BaseEntity {
 
           throw new BadRequestException(error.column + ' should not be null');
         default:
-          if (error instanceof TypeORMError) {
-            Logger.verbose(JSON.stringify(error), error.constructor.name);
-
-            throw new InternalServerErrorException(error);
-          }
-
           throw error;
       }
     });

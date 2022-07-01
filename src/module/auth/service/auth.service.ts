@@ -43,6 +43,7 @@ export class AuthService {
       req.session.destroy((err) => {
         if (err) {
           console.log(err);
+
           return reject(false);
         }
       });

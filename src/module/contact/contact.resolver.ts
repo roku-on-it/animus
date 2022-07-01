@@ -12,7 +12,7 @@ import { Payload } from '../shared/decorator/param/payload';
 import { UpdateContact } from './input/update-contact';
 import { DeleteContact } from './input/delete-contact';
 import { ContactList } from './model/contact-list';
-import { ListContact } from './input/list-contact';
+import { ListContact } from './input/list/list-contact';
 import { Person } from '../person/model/person';
 
 @Resolver(() => Contact)

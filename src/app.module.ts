@@ -12,12 +12,8 @@ import { IdentityModule } from './module/identity/identity.module';
 import { AddressModule } from './module/address/address.module';
 import { NoteModule } from './module/note/note.module';
 import { ContactModule } from './module/contact/contact.module';
-
-// TODO: Specify the lengths of text based fields
-// TODO: Refactor @*Length & co-related decorators after specifying text length
-// TODO: Refactor @ResolveField decorated methods to return list-*.find();
-// TODO: Add proper missing authorization & authentication to entity's resolver methods
-// TODO: Introduce setting optional object property with spread operator to list-*.ts classes ---> ...(condition && { key: "value" }),
+import { LastKnownPlaceModule } from './module/last-known-place/last-known-place.module';
+import { SocialProfileModule } from './module/social-profile/social-profile.module';
 
 @Module({
   imports: [
@@ -34,6 +30,8 @@ import { ContactModule } from './module/contact/contact.module';
     AddressModule,
     NoteModule,
     ContactModule,
+    LastKnownPlaceModule,
+    SocialProfileModule,
   ],
 })
 export class AppModule {}

@@ -7,6 +7,7 @@ export function IsUsername(
   return applyDecorators(
     Matches(/^[\w](?!.*?\.{2})[\w.]{1,30}[\w]$/i, {
       message: '$property does not satisfy required pattern',
+      ...validationOptions,
     }),
     Length(3, 32, validationOptions),
   );

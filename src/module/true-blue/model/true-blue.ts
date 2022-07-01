@@ -7,7 +7,6 @@ import { TrueBlueWithAuth } from './flag/true-blue-with-auth';
 @ObjectType()
 @Entity()
 export class TrueBlue extends Substructure {
-  @Field(() => User)
   @OneToOne(() => User, (u) => u.trueBlue, { nullable: false })
   @JoinColumn()
   user: User;

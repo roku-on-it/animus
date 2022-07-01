@@ -7,6 +7,7 @@ export function IsPassword(
   return applyDecorators(
     Matches(/^(?=.*\p{Ll})(?=.*\p{Lu})(?=.*\d).{8,}$/u, {
       message: '$property does not satisfy required pattern',
+      ...validationOptions,
     }),
     Length(8, 64, validationOptions),
   );

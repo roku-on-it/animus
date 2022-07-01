@@ -30,6 +30,7 @@ export class AuthResolver {
   ): Promise<User> {
     return this.authService.validate(payload).then((user) => {
       req.session.userId = user.id;
+
       return user;
     });
   }

@@ -15,6 +15,7 @@ import { Authorize } from '../auth/decorator/authorize';
 import { UserRole } from '../user/model/enum/user-role';
 import { CurrentUser } from '../shared/decorator/param/current-user';
 import { ForbiddenException } from '@nestjs/common';
+import { RateLimit } from '../misc/app-throttle/decorator/rate-limit';
 
 @Resolver(() => TrueBlue)
 export class TrueBlueResolver {
@@ -34,6 +35,7 @@ export class TrueBlueResolver {
   }
 
   @Authorize(UserRole.Root)
+  @RateLimit(1, 60 * 60)
   @Mutation(() => TrueBlue)
   async createTrueBlue(
     @CurrentUser() currentUser: User,
@@ -48,20 +50,22 @@ export class TrueBlueResolver {
     }
 
     const user = await User.findOneOrFail(payload.user.id);
+
     return plainToInstance(TrueBlue, { user }).save();
   }
 
   @Authorize(UserRole.Root)
+  @RateLimit(2, 10)
   @Mutation(() => TrueBlue)
   async deleteTrueBlue(
     @CurrentUser() currentUser: User,
     @Payload() payload: DeleteTrueBlue,
   ): Promise<TrueBlue> {
-    const userTrueBlue = await TrueBlue.withAuth.findOneOrFail({
+    const currentUserTrueBlue = await TrueBlue.withAuth.findOneOrFail({
       where: { user: { id: currentUser.id } },
     });
 
-    if (!userTrueBlue.hasTrueRootPrivilege) {
+    if (!currentUserTrueBlue.hasTrueRootPrivilege) {
       throw new ForbiddenException('Insufficient permission');
     }
 

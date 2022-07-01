@@ -15,6 +15,7 @@ import { Identity } from '../../identity/model/identity';
 import { Address } from '../../address/model/address';
 import { Note } from '../../note/model/note';
 import { Contact } from '../../contact/model/contact';
+import { LastKnownPlace } from '../../last-known-place/model/last-known-place';
 
 @ObjectType()
 @Entity()
@@ -27,25 +28,28 @@ export class Person extends Substructure {
   @Column({ nullable: true })
   description: string;
 
-  @ManyToOne(() => User, (u) => u.persons, { nullable: true })
+  @ManyToOne(() => User, (u) => u.persons)
   createdBy: User;
 
-  @ManyToMany(() => Person, (p) => p.acquaintances, { nullable: true })
+  @ManyToMany(() => Person, (p) => p.acquaintances)
   @JoinTable()
   acquaintances: Person[];
 
-  @OneToOne(() => PhysicalAppearance, (p) => p.person, { nullable: true })
+  @OneToOne(() => PhysicalAppearance, (p) => p.person)
   physicalAppearance: PhysicalAppearance;
 
-  @OneToOne(() => Identity, (i) => i.person, { nullable: true })
+  @OneToOne(() => Identity, (i) => i.person)
   identity: Identity;
 
-  @OneToMany(() => Address, (a) => a.person, { nullable: true })
+  @OneToMany(() => Address, (a) => a.person)
   addresses: Address[];
 
-  @OneToMany(() => Note, (n) => n.person, { nullable: true })
+  @OneToMany(() => Note, (n) => n.person)
   notes: Note[];
 
-  @OneToMany(() => Contact, (c) => c.person, { nullable: true })
+  @OneToMany(() => Contact, (c) => c.person)
   contacts: Contact[];
+
+  @OneToMany(() => LastKnownPlace, (c) => c.person)
+  lastKnownPlaces: LastKnownPlace[];
 }

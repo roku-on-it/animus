@@ -2,7 +2,7 @@ import { Context, Mutation, Parent, Query, Resolver } from '@nestjs/graphql';
 import { User } from 'src/module/user/model/user';
 import { CurrentUser } from 'src/module/shared/decorator/param/current-user';
 import { UpdateUser } from 'src/module/user/input/update-user';
-import { ListUser } from 'src/module/user/input/list-user';
+import { ListUser } from 'src/module/user/input/list/list-user';
 import { DeleteUser } from 'src/module/user/input/delete-user';
 import { ForbiddenException } from '@nestjs/common';
 import { UpdateMyPassword } from 'src/module/user/input/update-my-password';
@@ -19,7 +19,7 @@ import { Authorize } from '../auth/decorator/authorize';
 import { UserRole } from './model/enum/user-role';
 import { DeleteMe } from './input/delete-me';
 import { PersonList } from '../person/model/person-list';
-import { ListPerson } from '../person/input/list-person';
+import { ListPerson } from '../person/input/list/list-person';
 import { ProtectedResolveField } from '../shared/decorator/method/protected-resolve-field';
 
 @Resolver(() => User)
@@ -39,7 +39,7 @@ export class UserResolver {
   }
 
   @Authorize(UserRole.Root)
-  @RateLimit(10, 20)
+  @RateLimit(2, 20)
   @Mutation(() => User)
   async updateUser(
     @CurrentUser() currentUser: User,
@@ -55,7 +55,7 @@ export class UserResolver {
   }
 
   @Authorize(UserRole.Root)
-  @RateLimit(2, 10)
+  @RateLimit(1, 60 * 60)
   @Mutation(() => User)
   async deleteUser(
     @CurrentUser() currentUser: User,
@@ -78,7 +78,7 @@ export class UserResolver {
     return currentUser;
   }
 
-  @RateLimit(2, 10)
+  @RateLimit(1, 60 * 60)
   @Mutation(() => User)
   async updateMyPassword(
     @CurrentUser() currentUser: User,
@@ -116,10 +116,11 @@ export class UserResolver {
     }
 
     await this.authService.logoutAndDestroySession(context);
+
     return currentUser.softRemove();
   }
 
-  // @RateLimit(3, 60)
+  @RateLimit(1, 60 * 30)
   @Mutation(() => User)
   async updateMe(
     @CurrentUser() currentUser: User,
@@ -128,6 +129,7 @@ export class UserResolver {
     return plainToClassFromExist(currentUser, payload).save();
   }
 
+  // Leaving here for further reference
   @ProtectedResolveField(() => PersonList)
   async persons(
     @Parent() createdBy: User,
